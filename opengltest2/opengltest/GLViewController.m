@@ -14,9 +14,10 @@
     GLint _attr_pos;
     GLint _attr_uv;
     
-    GLint _unif_texture;
     GLuint texture_id;
-    
+
+    GLint _unif_texture;
+
     GLKTextureInfo* textureInfo;
     
 }
@@ -73,31 +74,33 @@
 {
     
     [EAGLContext setCurrentContext:self.context];
-    
     [self loadShaders];
-    
-    //頂点シェーダの引数を取得する
-    _attr_pos = glGetAttribLocation(_program, "attr_pos");
-    
-    //頂点シェーダの引数を取得する
-    _attr_uv = glGetUniformLocation(_program, "attr_uv");
-    
-    //頂点シェーダの引数を取得する
-    _unif_texture = glGetUniformLocation(_program, "texture");
-    
-    //テクスチャの読み込み
-    [self textureload];
 
     //シェーダーの利用を開始
     glUseProgram(_program);
 
+    //頂点引数を取得する
+    _attr_pos = glGetAttribLocation(_program, "attr_pos");
+    _attr_uv = glGetAttribLocation(_program, "attr_uv");
+    
+    //固定引数を取得する
+    _unif_texture = glGetUniformLocation(_program, "unif_texture");
+    
+    //頂点シェーダへの引数割り当てを有効にする
+    glEnableVertexAttribArray(_attr_pos);
+    glEnableVertexAttribArray(_attr_uv);
+    
+    //テクスチャの読み込み
+    texture_id = [self textureload];
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
 }
 
 - (void)tearDownGL
 {
     [EAGLContext setCurrentContext:self.context];
-    
-
 }
 
 #pragma mark - GLKView and GLKViewController delegate methods
@@ -107,11 +110,13 @@
     
 }
 
--(void)textureload{
+-(GLuint)textureload{
+
+    GLuint _texture_id;
 
     //-----------------------
     //画像ピクセルを読み込み
-    CGImageRef image = [UIImage imageNamed:@"sss.jpg"].CGImage;
+    CGImageRef image = [UIImage imageNamed:@"xbox-icon.png"].CGImage;
     
     assert(image != NULL);
     
@@ -130,61 +135,48 @@
                                                       (CGBitmapInfo)kCGImageAlphaPremultipliedLast
                                                       );// 第六引数がCGImageGetColorSpace(image)だとバグる模様
     
+    CGContextClearRect(imageContext,CGRectMake(0, 0, (CGFloat)width, (CGFloat)height));
     CGContextDrawImage(imageContext, CGRectMake(0, 0, (CGFloat)width, (CGFloat)height), image);
-
-    /*
-    for (int i=0; i<width*height; i++) {
-        int r = imageData[i*4+0];
-        int g = imageData[i*4+1];
-        int b = imageData[i*4+2];
-        NSLog(@"rgb(%d,%d,%d)",r,g,b);// 要素をチェック（ここはできている。）
-    }
-    */
-
-    //-----------------------
-    //OpenGL用のテクスチャを生成します
-    glGenTextures(1, &texture_id);
-    
-    assert(texture_id != 0);
-    assert(glGetError() == GL_NO_ERROR);
     
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-    assert(glGetError() == GL_NO_ERROR);
     
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    assert(glGetError() == GL_NO_ERROR);
+    //OpenGL用のテクスチャを生成します
+    glGenTextures(1, &_texture_id);
     
+    assert(_texture_id != 0);
+
+    //glBindTexture(GL_TEXTURE_2D, _texture_id);
+
     //VRAMにコピーして、元は解放
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);//ここでセットされていない？
-    assert(glGetError() == GL_NO_ERROR);
-
+    
     CGContextRelease(imageContext);
     free(imageData);// imageDataを解放
 
     //パラメータ設定
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    
     assert(glGetError() == GL_NO_ERROR);
     
     
+    return _texture_id;
 
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    
+    
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_id);
-
     
-    //頂点シェーダへの引数割り当てを有効にする
-    glEnableVertexAttribArray(_attr_pos);
-    glEnableVertexAttribArray(_attr_uv);
-
-    glUseProgram(_program);
     glUniform1i(_unif_texture, 0);
     
     const GLfloat position[] = {
@@ -202,10 +194,9 @@
     };
     
     glVertexAttribPointer(_attr_pos, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)position);
-    glVertexAttribPointer(_unif_texture, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)uv);
+    glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)uv);
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
     
 }
 

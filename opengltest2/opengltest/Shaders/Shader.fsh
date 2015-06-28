@@ -6,10 +6,10 @@
 //  Copyright (c) 2015年 ryu. All rights reserved.
 //
 
-uniform sampler2D texture;
+uniform sampler2D unif_texture;
 varying mediump vec2 vary_uv;
 
 void main()
 {
-    gl_FragColor = texture2D(texture, vary_uv);
+    gl_FragColor = texture2D(unif_texture, vary_uv);
 }

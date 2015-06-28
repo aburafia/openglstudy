@@ -80,27 +80,14 @@
     
     //頂点シェーダの引数を取得する
     _attr_pos = glGetAttribLocation(_program, "attr_pos");
+    _attr_color = glGetAttribLocation(_program, "attr_color");
     
     //頂点シェーダの引数を取得する
     _uni_move_pos = glGetUniformLocation(_program, "uni_move_pos");
     
-    //頂点シェーダの引数を取得する
-    //_uni_move_pos = glGetUniformLocation(_program, "uni_move_pos");
-
-    
-    //頂点シェーダの引数を取得する
-    _attr_color = glGetAttribLocation(_program, "attr_color");
-
-    
     //頂点シェーダへの引数割り当てを有効にする
     glEnableVertexAttribArray(_attr_pos);
-    
-    
-    //頂点シェーダへの引数割り当てを有効にする
     glEnableVertexAttribArray(_attr_color);
-
-
-    //頂点シェーダへの引数割り当てを有効にする
     glEnableVertexAttribArray(_uni_move_pos);
     
     
@@ -126,11 +113,8 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    
-    
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    
     
     //描画色の指定
     //glUniform4f(_unif_color, 1.0f, 0.0f, 1.0f, 1.0f);

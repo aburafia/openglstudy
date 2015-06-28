@@ -16,8 +16,8 @@
 		42C6CB851AE7ADE800F0570B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42C6CB831AE7ADE800F0570B /* LaunchScreen.xib */; };
 		42C6CB911AE7ADE800F0570B /* opengltestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6CB901AE7ADE800F0570B /* opengltestTests.m */; };
 		42C6CB9C1AE7B3BD00F0570B /* GLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6CB9B1AE7B3BD00F0570B /* GLViewController.m */; };
-		42C6CB9E1AEFB36D00F0570B /* xbox-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C6CB9D1AEFB36D00F0570B /* xbox-icon.png */; };
-		42C6CBA21AEFC13D00F0570B /* sss.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42C6CBA11AEFC13D00F0570B /* sss.jpg */; };
+		42FA27691B3F14D600F7D603 /* sss.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42FA27671B3F14D600F7D603 /* sss.jpg */; };
+		42FA276A1B3F14D600F7D603 /* xbox-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FA27681B3F14D600F7D603 /* xbox-icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,8 +46,8 @@
 		42C6CB901AE7ADE800F0570B /* opengltestTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = opengltestTests.m; sourceTree = "<group>"; };
 		42C6CB9A1AE7B3BD00F0570B /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLViewController.h; sourceTree = "<group>"; };
 		42C6CB9B1AE7B3BD00F0570B /* GLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLViewController.m; sourceTree = "<group>"; };
-		42C6CB9D1AEFB36D00F0570B /* xbox-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xbox-icon.png"; sourceTree = "<group>"; };
-		42C6CBA11AEFC13D00F0570B /* sss.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sss.jpg; sourceTree = "<group>"; };
+		42FA27671B3F14D600F7D603 /* sss.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sss.jpg; sourceTree = "<group>"; };
+		42FA27681B3F14D600F7D603 /* xbox-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xbox-icon.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,8 +71,6 @@
 		42C6CB641AE7ADE800F0570B = {
 			isa = PBXGroup;
 			children = (
-				42C6CBA11AEFC13D00F0570B /* sss.jpg */,
-				42C6CB9D1AEFB36D00F0570B /* xbox-icon.png */,
 				42C6CB6F1AE7ADE800F0570B /* opengltest */,
 				42C6CB8D1AE7ADE800F0570B /* opengltestTests */,
 				42C6CB6E1AE7ADE800F0570B /* Products */,
@@ -91,6 +89,8 @@
 		42C6CB6F1AE7ADE800F0570B /* opengltest */ = {
 			isa = PBXGroup;
 			children = (
+				42FA27671B3F14D600F7D603 /* sss.jpg */,
+				42FA27681B3F14D600F7D603 /* xbox-icon.png */,
 				42C6CB741AE7ADE800F0570B /* AppDelegate.h */,
 				42C6CB751AE7ADE800F0570B /* AppDelegate.m */,
 				42C6CB771AE7ADE800F0570B /* Shader.fsh */,
@@ -211,13 +211,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42FA276A1B3F14D600F7D603 /* xbox-icon.png in Resources */,
 				42C6CB851AE7ADE800F0570B /* LaunchScreen.xib in Resources */,
-				42C6CB9E1AEFB36D00F0570B /* xbox-icon.png in Resources */,
 				42C6CB801AE7ADE800F0570B /* Main.storyboard in Resources */,
 				42C6CB821AE7ADE800F0570B /* Images.xcassets in Resources */,
+				42FA27691B3F14D600F7D603 /* sss.jpg in Resources */,
 				42C6CB7A1AE7ADE800F0570B /* Shader.vsh in Resources */,
 				42C6CB781AE7ADE800F0570B /* Shader.fsh in Resources */,
-				42C6CBA21AEFC13D00F0570B /* sss.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
