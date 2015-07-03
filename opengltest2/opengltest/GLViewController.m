@@ -8,18 +8,21 @@
 
 #import "GLViewController.h"
 
+#define LOADER 1
+
 @interface GLViewController (){
     GLuint _program;
     
     GLint _attr_pos;
     GLint _attr_uv;
-    
-    GLuint texture_id;
 
     GLint _unif_texture;
 
-    GLKTextureInfo* textureInfo;
-    
+#ifdef LOADER
+    GLKTextureInfo* textureInfo;    //読み込み関数つかったバージョン
+#else
+    GLuint texture_id;  //画像読み込みバージョン
+#endif
 }
 
 
@@ -32,8 +35,6 @@
 - (BOOL)validateProgram:(GLuint)prog;
 
 @property (strong, nonatomic) EAGLContext *context;
-@property (strong, nonatomic) GLKBaseEffect *effect;
-
 
 @end
 
@@ -90,11 +91,15 @@
     glEnableVertexAttribArray(_attr_pos);
     glEnableVertexAttribArray(_attr_uv);
     
-    //テクスチャの読み込み
+    
+#ifdef LOADER
+    NSURL* imgurl = [[NSBundle mainBundle] URLForResource:@"xbox-icon" withExtension:@"png"];
+    textureInfo = [GLKTextureLoader textureWithContentsOfURL:imgurl options:nil error:NULL];
+#else
     texture_id = [self textureload];
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#endif
+    
+    
     
 }
 
@@ -131,53 +136,56 @@
                                                       height,
                                                       8,
                                                       width * 4,
-                                                      CGColorSpaceCreateDeviceRGB(),
+                                                      CGImageGetColorSpace(image),
                                                       (CGBitmapInfo)kCGImageAlphaPremultipliedLast
                                                       );// 第六引数がCGImageGetColorSpace(image)だとバグる模様
     
-    CGContextClearRect(imageContext,CGRectMake(0, 0, (CGFloat)width, (CGFloat)height));
     CGContextDrawImage(imageContext, CGRectMake(0, 0, (CGFloat)width, (CGFloat)height), image);
+    CGContextRelease(imageContext);
     
-    glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+    //glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     
     //OpenGL用のテクスチャを生成します
     glGenTextures(1, &_texture_id);
     
     assert(_texture_id != 0);
 
-    //glBindTexture(GL_TEXTURE_2D, _texture_id);
+    glBindTexture(GL_TEXTURE_2D, _texture_id);
 
+    //パラメータ設定
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    
     //VRAMにコピーして、元は解放
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);//ここでセットされていない？
     
-    CGContextRelease(imageContext);
     free(imageData);// imageDataを解放
-
-    //パラメータ設定
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, GL_REPEAT);
-
     
     assert(glGetError() == GL_NO_ERROR);
     
-    
     return _texture_id;
-
+    
 }
+
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     
-    
+    //glUseProgram(_program);
+
+    //水色で背景塗りつぶす
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
     
-    glUniform1i(_unif_texture, 0);
+#ifdef LOADER
+    glBindTexture(GL_TEXTURE_2D, textureInfo.name);
+#else
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+#endif
+    
+    glUniform1f(_unif_texture, 0);
     
     const GLfloat position[] = {
         -0.75f, 0.75f,
