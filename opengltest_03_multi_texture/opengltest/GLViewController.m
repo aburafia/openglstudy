@@ -83,9 +83,11 @@
     glEnableVertexAttribArray(_attr_pos);
     glEnableVertexAttribArray(_attr_uv);
     
+    
     //テクスチャを２まい読み込む
-    [self textureload:@"mask.png" textureUniteId:GL_TEXTURE0];
-    [self textureload:@"xbox-icon.png" textureUniteId:GL_TEXTURE1];
+    [self textureload:@"xbox-icon.png" textureUniteId:GL_TEXTURE0];
+    [self textureload:@"mask.png" textureUniteId:GL_TEXTURE1];
+    [self textureload:@"rgb.png" textureUniteId:GL_TEXTURE2];
     
     //シェーダーの利用を開始
     glUseProgram(_program);
@@ -108,15 +110,18 @@
 //Bindを実行時に変えたい場合は対応してない。
 -(void)textureload:(NSString*)filename textureUniteId:(GLenum)textureUniteId{
 
+    //GLKTextureLoader内部でOpenGLの何かがされてるっぽい。まずはactiveを切り替えないといけないみたい
+    glActiveTexture(textureUniteId);
+    
     NSURL* imgurl = [[NSBundle mainBundle] URLForResource:filename withExtension:@""];
     GLKTextureInfo* textureInfo = [GLKTextureLoader textureWithContentsOfURL:imgurl options:nil error:NULL];
     
     //パラメータ設定
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_MIRRORED_REPEAT);
-    //glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_S , GL_MIRRORED_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D , GL_TEXTURE_WRAP_T , GL_REPEAT);
     
-    glActiveTexture(textureUniteId);
+    //glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
 
 }
@@ -132,8 +137,8 @@
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    glUniform1i(_unif_texture, 0);
-    
+    glUniform1i(_unif_texture, 2);
+
     const GLfloat position[] = {
         -0.75f, 0.75f,
         -0.75f, -0.75f,
