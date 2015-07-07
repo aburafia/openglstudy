@@ -8,12 +8,13 @@
 
 uniform sampler2D unif_texture;
 uniform sampler2D unif_mask;
+uniform mediump float unif_threshold;
 
 varying mediump vec2 vary_uv;
 
 void main()
 {
-    if(texture2D(unif_mask,vary_uv).r > 0.5){
+    if(texture2D(unif_mask,vary_uv).g < unif_threshold){
         discard;
     }    
     

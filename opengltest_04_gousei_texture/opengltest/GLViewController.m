@@ -18,6 +18,7 @@
 
     GLint _unif_texture;
     GLint _unif_mask;
+    GLint _unif_threshold;
 }
 
 
@@ -80,6 +81,7 @@
     //固定引数を取得する
     _unif_texture = glGetUniformLocation(_program, "unif_texture");
     _unif_mask = glGetUniformLocation(_program, "unif_mask");
+    _unif_threshold = glGetUniformLocation(_program, "unif_threshold");
     
     //頂点シェーダへの引数割り当てを有効にする
     glEnableVertexAttribArray(_attr_pos);
@@ -128,7 +130,6 @@
 
 }
 
-
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     
@@ -139,21 +140,45 @@
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    glUniform1i(_unif_texture, 2);
-    glUniform1i(_unif_mask, 1);
+    glUniform1i(_unif_texture, 1);
+    glUniform1i(_unif_mask, 0);
+    glUniform1f(_unif_threshold, 0.9);
+    
+    //画像ポジションを正確にやってみよう
+    const GLfloat x = 50;
+    const GLfloat y = 200;
+    const GLfloat w = 300;
+    const GLfloat h = 300;
+    
+    float view_width = view.bounds.size.width;
+    float view_height = view.bounds.size.height;
+    
+    GLfloat L = ((x/view_width) * 2.0f) - 1.0 ;
+    GLfloat R = ((x+w)/view_width) * 2.0 - 1.0 ;
+    GLfloat T = ((y/view_height) * 2.0 -1.0 ) * -1.0f;
+    GLfloat B = (((y+h)/view_height) * 2.0 -1.0) * -1.0f;
 
+    const GLfloat position[] = {
+        L, T,
+        L ,B,
+        R, T,
+        R, B
+    };
+
+    /*
     const GLfloat position[] = {
         -0.75f, 0.75f,
         -0.75f, -0.75f,
         0.75f, 0.75f,
         0.75f, -0.75f
     };
+    */
     
     const GLfloat uv[] = {
-        -1, -1,
-        -1, 2,
-        2, -1,
-        2, 2
+        0, 0,
+        0, 1,
+        1, 0,
+        1, 1
     };
     
     glVertexAttribPointer(_attr_pos, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid*)position);
