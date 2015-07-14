@@ -1,2 +1,6 @@
-/opengltest/Build/
-/opengltest2/Build/
+/opengltest_01/Build/
+/opengltest_02_texture/Build/
+/opengltest_03_multi_texture/Build/
+/opengltest_04_gousei_texture/Build/
+/opengltest_05_matrix/Build/
+/opengltest_06_3dbigin/Build/
