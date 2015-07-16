@@ -159,7 +159,7 @@
     m.m[0].z = (axis.x * axis.z * (1 - cos)) + (axis.y * sin);
     m.m[0].w = 0;
     
-    m.m[1].x = (axis.y * axis.x * (1 - cos)) - (axis.z * sin);
+    m.m[1].x = (axis.y * axis.x * (1 - cos)) + (axis.z * sin);
     m.m[1].y = (axis.y * axis.y * (1 - cos)) + cos;
     m.m[1].z = (axis.y * axis.z * (1 - cos)) - (axis.x * sin);
     m.m[1].w = 0;

@@ -190,15 +190,15 @@ float aaa = 0;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     //三角形の色指定
-    glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 0.5f);
+    glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 1.0f);
     
     /*
     //三角形の頂点指定
      //もともと使ってたやつ
     const GLfloat posTri[] = {
-        0.0f, 0.5f, -0.0f,
-        -0.5f, 0.0f, -0.0f,
-        0.5f, 0.0f, -0.0f,
+        0.0f, 0.5f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.5f, 0.0f, 0.0f,
     };
     */
     
