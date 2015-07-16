@@ -225,25 +225,26 @@ float aaa = 0;
     };
     
     
-    aaa += 0.1;
     
-    GLfloat pospos[9];
+    GLfloat varts[9];
     mat4 lookAt = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
-    vec3 line1 = [mat4obj multiplyVec3:[vec3obj init:0 y:0.5f z:0] m:lookAt];
-    [vec3obj copyToArray:line1 a:&pospos[0]];
     
-    vec3 line2 = [mat4obj multiplyVec3:[vec3obj init:0 y:0 z:0] m:lookAt];
-    [vec3obj copyToArray:line2 a:&pospos[3]];
+    vec3 vart1 = [mat4obj multiplyVec3:[vec3obj init:0 y:0.5f z:0] m:lookAt];
+    [vec3obj copyToArray:vart1 a:&varts[0]];
     
-    vec3 line3 = [mat4obj multiplyVec3:[vec3obj init:0.5 y:0 z:0] m:lookAt];
-    [vec3obj copyToArray:line3 a:&pospos[6]];
+    vec3 vart2 = [mat4obj multiplyVec3:[vec3obj init:0 y:0 z:0] m:lookAt];
+    [vec3obj copyToArray:vart2 a:&varts[3]];
+    
+    vec3 vart3 = [mat4obj multiplyVec3:[vec3obj init:0.5 y:0 z:0] m:lookAt];
+    [vec3obj copyToArray:vart3 a:&varts[6]];
 
     
-    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)pospos);
+    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)varts);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
     
     
-    
+    aaa += 0.1;
+
     
 }
 
