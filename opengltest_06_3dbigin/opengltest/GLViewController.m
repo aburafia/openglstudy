@@ -96,12 +96,16 @@
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     //カメラの初期位置
-    campos = [vec3obj init:3.0f y:1.5f z:-5.0f];
+    //campos = [vec3obj init:3.0f y:1.5f z:-5.0f];
 
 }
 
 -(void) cameraRendering{
     
+    //まだ使わない。
+    return;
+
+    /*
     vec3 _campos = campos;
     vec3 camlook = [vec3obj init:0 y:0 z:0];
     vec3 up = [vec3obj init:0 y:1 z:0];
@@ -126,9 +130,7 @@
     //行列を転送しとく
     glUniformMatrix4fv(_unif_loockat, 1, GL_FALSE, (GLfloat*)lookAtArray);
     glUniformMatrix4fv(_unif_projection, 1, GL_FALSE, (GLfloat*)projectionArray);
-    
-    
-
+    */
 }
 
 -(GLfloat)deg2rad:(GLfloat)deg{
@@ -173,74 +175,53 @@ float aaa = 0;
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     
-    //シェーダーの動的変更はしないので、initにもっていく
-    //glUseProgram(_program);
-    
-    
-    //カメラで行列をつくるぞー
-    campos.x -= 0.01f;
-    campos.z += 0.02f;
-    
-    //[self cameraRendering];
-    
-    
     /*
+    こっちはvertshaderでやるたいぷ。でばっぐしたいからコメント。
+     
     aaa += 0.01;
     mat4 lookAt = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
     GLfloat lookAtArray[4][4];
     [mat4obj copyToArray:lookAt a:lookAtArray];
     glUniformMatrix4fv(_unif_loockat, 1, GL_FALSE, (GLfloat*)lookAtArray);
      */
-    
-    
 
     //水色で背景塗りつぶす
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    //四角の色指定
-    glUniform4f(_unif_color, 1.0f, 0.0f, 1.0f, 0.5f);
-    
-    //四角の頂点指定
-    const GLfloat posSqu[] = {
-        -0.25f, 0.25f, 0.0f,
-        -0.25f, -0.25f, 0.0f,
-        0.25f, 0.25f, 0.0f,
-        0.25f, -0.25f, 0.0f,
-    };
-    
-    
-    
-    //glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posSqu);
-    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    
     //三角形の色指定
     glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 0.5f);
     
+    /*
     //三角形の頂点指定
+     //もともと使ってたやつ
     const GLfloat posTri[] = {
         0.0f, 0.5f, -0.0f,
         -0.5f, 0.0f, -0.0f,
         0.5f, 0.0f, -0.0f,
     };
+    */
     
-    
+    //GPU側でなく、CPU側で行列計算しよう。ったら、何がおかしいかわかるかも
+
+    //2Dの三角形を、Z軸で回転させたい
+    mat4 rotate_m = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
     
     GLfloat varts[9];
-    mat4 lookAt = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
     
-    vec3 vart1 = [mat4obj multiplyVec3:[vec3obj init:0 y:0.5f z:0] m:lookAt];
+    vec3 vart1 = [mat4obj multiplyVec3:[vec3obj init:0 y:0.5f z:0] m:rotate_m];
     [vec3obj copyToArray:vart1 a:&varts[0]];
     
-    vec3 vart2 = [mat4obj multiplyVec3:[vec3obj init:0 y:0 z:0] m:lookAt];
+    vec3 vart2 = [mat4obj multiplyVec3:[vec3obj init:0 y:0 z:0] m:rotate_m];
     [vec3obj copyToArray:vart2 a:&varts[3]];
     
-    vec3 vart3 = [mat4obj multiplyVec3:[vec3obj init:0.5 y:0 z:0] m:lookAt];
+    vec3 vart3 = [mat4obj multiplyVec3:[vec3obj init:0.5 y:0 z:0] m:rotate_m];
     [vec3obj copyToArray:vart3 a:&varts[6]];
 
-    
+    //行列適応後の頂点をおくる。
     glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)varts);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+    
     
     
     aaa += 0.1;
