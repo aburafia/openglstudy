@@ -168,6 +168,8 @@
 
 }
 
+float aaa = 0;
+
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     
@@ -179,7 +181,17 @@
     campos.x -= 0.01f;
     campos.z += 0.02f;
     
-    [self cameraRendering];
+    //[self cameraRendering];
+    
+    
+    /*
+    aaa += 0.01;
+    mat4 lookAt = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
+    GLfloat lookAtArray[4][4];
+    [mat4obj copyToArray:lookAt a:lookAtArray];
+    glUniformMatrix4fv(_unif_loockat, 1, GL_FALSE, (GLfloat*)lookAtArray);
+     */
+    
     
 
     //水色で背景塗りつぶす
@@ -191,26 +203,43 @@
     
     //四角の頂点指定
     const GLfloat posSqu[] = {
-        -0.25f, 0.25f, 0.5f,
-        -0.25f, -0.25f, 0.5f,
-        0.25f, 0.25f, 0.5f,
-        0.25f, -0.25f, 0.5f,
+        -0.25f, 0.25f, 0.0f,
+        -0.25f, -0.25f, 0.0f,
+        0.25f, 0.25f, 0.0f,
+        0.25f, -0.25f, 0.0f,
     };
     
-    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posSqu);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    
+    
+    //glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posSqu);
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     //三角形の色指定
     glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 0.5f);
     
     //三角形の頂点指定
     const GLfloat posTri[] = {
-        0.0f, 0.5f, -0.5f,
-        -0.5f, 0.0f, -0.5f,
-        0.5f, 0.0f, -0.5f,
+        0.0f, 0.5f, -0.0f,
+        -0.5f, 0.0f, -0.0f,
+        0.5f, 0.0f, -0.0f,
     };
     
-    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
+    
+    aaa += 0.1;
+    
+    GLfloat pospos[9];
+    mat4 lookAt = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
+    vec3 line1 = [mat4obj multiplyVec3:[vec3obj init:0 y:0.5f z:0] m:lookAt];
+    [vec3obj copyToArray:line1 a:&pospos[0]];
+    
+    vec3 line2 = [mat4obj multiplyVec3:[vec3obj init:0 y:0 z:0] m:lookAt];
+    [vec3obj copyToArray:line2 a:&pospos[3]];
+    
+    vec3 line3 = [mat4obj multiplyVec3:[vec3obj init:0.5 y:0 z:0] m:lookAt];
+    [vec3obj copyToArray:line3 a:&pospos[6]];
+
+    
+    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)pospos);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
     
     

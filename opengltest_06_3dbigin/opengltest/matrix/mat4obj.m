@@ -148,6 +148,8 @@
 
 +(mat4)rotate:(vec3)axis radian:(GLfloat)radian {
     
+    axis = [vec3obj normalize:axis];
+    
     GLfloat sin = sinf(radian);
     GLfloat cos = cosf(radian);
     
