@@ -148,21 +148,48 @@ static caminfo CAMINFOS[4];
     
     mat4 r = [mat4obj init];
     
-    //z=-1の時のy=0(カメラが0地点だからね)からみた、カメラに映る高さはいかのとおり。
+    
+    
+    /*
+     
+    TODO:1
+    r.m[2].z = (far + near) / (near - far);
+    r.m[2].w = (2 * far * near) / (near - far);
+     これの計算の由来は？しらべよう
+     
+    TODO:2
+    view変換行列はまぁうまくいってる。射影変換行列もなんとなく写経して
+    似たような行列をつくれるようになった。だからもうvertex shaderにわたして
+    実行してみよう。
+    
+    
+    */
+    
+    
+    
+    
+    //z=1の時のy=0(カメラが0地点だからね)からみた、カメラに映る高さはいかのとおり。
     //しかもどうせ、あとあとzで割られるので、符号は変わらないはず。
-    GLfloat heightZ1 = 1 / tan(fovYradian) / 2;
+    
+    float aaa = tan(fovYradian);
+    
+    GLfloat heightZ1 = tan(fovYradian) / 2;
+    
+    //const GLfloat f = (GLfloat) (1.0 / (tan(degree2radian(fovY_degree)) / 2.0)); // 1/tan(x) == cot(x)
+    
     
     //だって、、、画角半分の上しか見てない、、下も見なきゃじゃない？
     //いらないの？？
     //heightZ1 *= 2;
+    
 
-    r.m[0].x = 1 / heightZ1 * aspect;
+    r.m[0].x = (1 / heightZ1) / aspect;
     r.m[1].y = 1 / heightZ1;
     
-    r.m[2].z = far / (far - near);
-    r.m[2].w = (far * near) / (far - near);
+    r.m[2].z = (far + near) / (near - far);
+    r.m[2].w = (2 * far * near) / (near - far);
 
-    r.m[3].z = 1;
+    r.m[3].z = -1;
     r.m[3].w = 0;
     
     return r;
@@ -184,6 +211,15 @@ static caminfo CAMINFOS[4];
     
     return r4;
 
+}
+
++(vec4)cameraCalc:(mat4)view parspective:(mat4)parspective vert:(vec3)vert{
+    
+    vec4 r;
+    
+    mat4obj
+    
+    
 }
 
 

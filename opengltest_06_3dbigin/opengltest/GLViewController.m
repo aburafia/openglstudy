@@ -198,7 +198,7 @@
     vec3 campos = [vec3obj init:0.0f y:0.0f z:2.0f];
     vec3 lookpos = [vec3obj init:0.0f y:0.0f z:0.0f];
     vec3 up = [vec3obj init:0 y:1.0 z:0];
-    GLfloat near = 0.0f;
+    GLfloat near = 1.0f;
     GLfloat far = 30.0f;
     GLfloat fovYradian = [self deg2rad:60.0f];
     
