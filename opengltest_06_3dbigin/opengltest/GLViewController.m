@@ -219,11 +219,11 @@
     vec3 vert3 = [vec3obj init:0.5 y:0 z:-0.5];
 
     //カメラのプロパティ。位置、どこをみてるか、カメラの上の方向
-    vec3 campos = [vec3obj init:0.0f y:0.0f z:3.0f];
+    vec3 campos = [vec3obj init:0.0f y:0.0f z:1.0f];
     vec3 lookpos = [vec3obj init:0.0f y:0.0f z:0.0f];
-    vec3 up = [vec3obj init:0 y:1 z:0];
-    GLfloat near = -2.0f;
-    GLfloat far = 30.0f;
+    vec3 up = [vec3obj init:0 y:1.0 z:0];
+    GLfloat near = 10.0f;
+    GLfloat far = -30.0f;
     GLfloat fovYradian = [self deg2rad:60.0f];
     
     float view_width = view.bounds.size.width;

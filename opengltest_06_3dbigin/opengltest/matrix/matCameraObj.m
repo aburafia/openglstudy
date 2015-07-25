@@ -57,9 +57,9 @@ static caminfo CAMINFOS[4];
     //だから、変数名もカメラのZ軸て感じの名前にする
     vec3 camAxis_z = [vec3obj normalize:lookatvec]; //f
     
+    
     //カメラの向きを知りたいだけなので正規化しとく
     vec3 u = [vec3obj normalize:up];
-    
     
     //Y軸はこの段階では求められない。うまく説明できないけど、絵に描いたらわかると思う。
     //upがZと直行してないから。まず、直交してるときはモニターの真ん中に写る。
@@ -70,6 +70,11 @@ static caminfo CAMINFOS[4];
     
     //XとYができたので、改めてY軸求められる。
     vec3 camAxis_y = [vec3obj cross:camAxis_x v1:camAxis_z]; //u
+    
+    //でも、カメラはマイナス方向を向いてるはず。みぎて座標系だし。
+    //欲しいのは、「カメラのZ軸」であって、注視ベクトルが欲しいわけじゃない。
+    //だから、向きを逆にする
+    //camAxis_z = [vec3obj setLength:camAxis_z len:-1];
     
     r.m[0].x = camAxis_x.x;
     r.m[0].y = camAxis_x.y;
@@ -137,14 +142,14 @@ static caminfo CAMINFOS[4];
     
     //だって、、、画角半分の上しか見てない、、下も見なきゃじゃない？
     //いらないの？？
-    //heightZ1 *= 2;
+    heightZ1 *= 2;
     
     r.m[0].x = 1 / heightZ1 * aspect;
     r.m[1].y = 1 / heightZ1;
-    r.m[2].x = 1;
-    r.m[2].y = 1;
+    //r.m[2].x = 1;
+    //r.m[2].y = 1;
     r.m[2].z = 1;
-    r.m[2].w = 1;
+    //r.m[2].w = 1;
     
     //r.m[2].z = far / (far - near);
     //r.m[2].w = (far * near) / (far - near);
