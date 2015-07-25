@@ -22,8 +22,6 @@
     
     GLint _unif_loockat; //支店変換
     GLint _unif_projection; //カメラ位置
-    
-    //vec3 campos;
 }
 
 
@@ -95,9 +93,6 @@
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    //カメラの初期位置
-    //campos = [vec3obj init:0.0f y:0.0f z:2.0f];
-
 }
 
 /*
@@ -131,21 +126,15 @@
 }
 */
 
--(vec3) cameraViewCPU:(vec3)vert{
+-(vec4) cameraViewCPU:(vec3)vert{
     
     //ビュー変換行列
-    //mat4 viewmat = [matCameraObj viewMat4:0];
-    //vec3 vert2 = [mat4obj multiplyVec3:vert m:viewmat];
-    
     vec3 vert2 = [matCameraObj view:0 v:vert];
     
     //次に射影変換
-    //mat4 projectionmat = [matCameraObj perspective:0];
-    //vec3 vert3 = [mat4obj multiplyVec3:vert2 m:projectionmat];
-
-    vec3 vert3 = [matCameraObj perspective:0 v:vert2];
+    vec4 vert4 = [matCameraObj perspective:0 v:vert2];
     
-    return vert3;
+    return vert4;
 }
 
 -(GLfloat)deg2rad:(GLfloat)deg{
@@ -190,16 +179,8 @@
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
     //[self testDrawTriangle];
-
-    /*
-    //回転行列ー
-    mat4 rot = [mat4obj rotate:[vec3obj init:0 y:0 z:1] radian: aaa];
-    GLfloat rotArray[4][4];
-    [mat4obj copyToArray:rot a:rotArray];
-    glUniformMatrix4fv(_unif_loockat, 1, GL_FALSE, (GLfloat*)rotArray);
-    */
     
-    //[self cameraRendering];
+    //[self cameraRenderingGPU];
     
     //水色で背景塗りつぶす
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
@@ -208,15 +189,7 @@
     //三角形の色指定
     glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 0.8f);
     
-    /*
-    //三角形の頂点指定 もともと使ってたやつ
-    const GLfloat posTri[] = {
-        0.0f, 0.5f, -0.5f,
-        -0.5f, 0.0f, 0.5f,
-        0.5f, 0.0f, 0.5f,
-    };
-    */
-    
+    //三角形の頂点を作る
     vec3 vert1 = [vec3obj init:0 y:0.5 z:-0.5];
     vec3 vert2 = [vec3obj init:-0.5 y:0 z:-0.5];
     vec3 vert3 = [vec3obj init:0.5 y:0 z:-0.5];
@@ -243,18 +216,20 @@
                   fovYradian:fovYradian
                       aspect:aspect];
     
-    vert1 = [self cameraViewCPU:vert1];
-    vert2 = [self cameraViewCPU:vert2];
-    vert3 = [self cameraViewCPU:vert3];
+    //カメラ情報で画面に出すべき座標を計算するよ！
+    //戻り値は、wの値が入ってくるから、vec4だよ
+    vec4 vec4_vert1 = [self cameraViewCPU:vert1];
+    vec4 vec4_vert2 = [self cameraViewCPU:vert2];
+    vec4 vec4_vert3 = [self cameraViewCPU:vert3];
     
-    GLfloat posTri[9];
+    GLfloat posTri[12];
     
-    [vec3obj copyToArray:vert1 a:&posTri[0]];
-    [vec3obj copyToArray:vert2 a:&posTri[3]];
-    [vec3obj copyToArray:vert3 a:&posTri[6]];
+    [vec4obj copyToArray:vec4_vert1 a:&posTri[0]];
+    [vec4obj copyToArray:vec4_vert2 a:&posTri[4]];
+    [vec4obj copyToArray:vec4_vert3 a:&posTri[8]];
     
     //行列適応後の頂点をおくる。
-    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
+    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
 
 }

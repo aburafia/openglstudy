@@ -34,11 +34,11 @@ static caminfo CAMINFOS[4];
 
 
 //ビュー変換行列
-//カメラの位置  campos
-//カメラが見るポイントの位置  lookpos
-//カメラの上向き  up
 +(mat4)viewMat4:(int)camnum{
 
+    //カメラの位置  campos
+    //カメラが見るポイントの位置  lookpos
+    //カメラの上向き  up
     vec3 campos = CAMINFOS[camnum].campos;
     vec3 lookpos = CAMINFOS[camnum].lookpos;
     vec3 up = CAMINFOS[camnum].up;
@@ -52,7 +52,6 @@ static caminfo CAMINFOS[4];
     //lookからeye引いて、カメラが向いているベクトルを取得
     vec3 lookatvec = [vec3obj init:lookpos.x-campos.x y:lookpos.y-campos.y z:lookpos.z-campos.z ];
     
-    //
     //カメラが向いている方をZ軸の-1の方と考える。
     //だから、変数名もカメラのZ軸て感じの名前にする
     vec3 camAxis_z = [vec3obj normalize:lookatvec]; //f
@@ -100,6 +99,7 @@ static caminfo CAMINFOS[4];
     
     
     /*
+     参考図書からの写経。いちおうのこしておく
     r.m[0].x = s.x;
      r.m[1].x = s.y;
      r.m[2].x = s.z;
@@ -125,6 +125,7 @@ static caminfo CAMINFOS[4];
     return r;
 }
 
+//view行列適応。これでカメラが0.0.0からの世界になる
 +(vec3)view:(int)camnum v:(vec3)v{
     
     vec3 r;
@@ -137,7 +138,7 @@ static caminfo CAMINFOS[4];
 }
 
 
-//射影変換行列
+//射影変換行列をつくろう
 +(mat4)perspectiveMat4:(int)camnum{
     
     GLfloat near = CAMINFOS[camnum].near;
@@ -167,8 +168,8 @@ static caminfo CAMINFOS[4];
     return r;
 }
 
-+(vec3)perspective:(int)camnum v:(vec3)v{
-    vec3 r;
+//射影行列適応。Wがはいるから、vec4でかえす
++(vec4)perspective:(int)camnum v:(vec3)v{
     vec4 r4;
     
     mat4 perspectivemat = [matCameraObj perspectiveMat4:camnum];
@@ -181,7 +182,7 @@ static caminfo CAMINFOS[4];
     
     r4 = [mat4obj multiplyVec4:v4 m:perspectivemat];
     
-    return r;
+    return r4;
 
 }
 

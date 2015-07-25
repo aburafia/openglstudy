@@ -33,7 +33,7 @@ typedef struct caminfo{
            aspect:(GLfloat)aspect;
 
 +(vec3)view:(int)camnum v:(vec3)v;
-+(vec3)perspective:(int)camnum  v:(vec3)v;
++(vec4)perspective:(int)camnum  v:(vec3)v;
 
 
 @end
