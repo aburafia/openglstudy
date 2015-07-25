@@ -46,30 +46,31 @@
     mat4 tmp = [mat4obj init];
     
     tmp.m[0].x = m.m[0].x * v.x;
-    tmp.m[0].y = m.m[0].y * v.x;
-    tmp.m[0].z = m.m[0].z * v.x;
-    tmp.m[0].w = m.m[0].w * v.x;
+    tmp.m[0].y = m.m[0].y * v.y;
+    tmp.m[0].z = m.m[0].z * v.z;
+    tmp.m[0].w = m.m[0].w * v.w;
     
-    tmp.m[1].x = m.m[1].x * v.y;
+    tmp.m[1].x = m.m[1].x * v.x;
     tmp.m[1].y = m.m[1].y * v.y;
-    tmp.m[1].z = m.m[1].z * v.y;
-    tmp.m[1].w = m.m[1].w * v.y;
+    tmp.m[1].z = m.m[1].z * v.z;
+    tmp.m[1].w = m.m[1].w * v.w;
 
-    tmp.m[2].x = m.m[2].x * v.z;
-    tmp.m[2].y = m.m[2].y * v.z;
+    tmp.m[2].x = m.m[2].x * v.x;
+    tmp.m[2].y = m.m[2].y * v.y;
     tmp.m[2].z = m.m[2].z * v.z;
-    tmp.m[2].w = m.m[2].w * v.z;
+    tmp.m[2].w = m.m[2].w * v.w;
 
-    tmp.m[3].x = m.m[3].x * v.w;
-    tmp.m[3].y = m.m[3].y * v.w;
-    tmp.m[3].z = m.m[3].z * v.w;
+    tmp.m[3].x = m.m[3].x * v.x;
+    tmp.m[3].y = m.m[3].y * v.y;
+    tmp.m[3].z = m.m[3].z * v.z;
     tmp.m[3].w = m.m[3].w * v.w;
 
-    r.x = tmp.m[0].x + tmp.m[1].x + tmp.m[2].x + tmp.m[3].x;
-    r.y = tmp.m[0].y + tmp.m[1].y + tmp.m[2].y + tmp.m[3].y;
-    r.z = tmp.m[0].z + tmp.m[1].z + tmp.m[2].z + tmp.m[3].z;
-    r.w = tmp.m[0].w + tmp.m[1].w + tmp.m[2].w + tmp.m[3].w;
+    r.x = tmp.m[0].x + tmp.m[0].y + tmp.m[0].z + tmp.m[0].w;
+    r.y = tmp.m[1].x + tmp.m[1].y + tmp.m[1].z + tmp.m[1].w;
+    r.z = tmp.m[2].x + tmp.m[2].y + tmp.m[2].z + tmp.m[2].w;
+    r.w = tmp.m[3].x + tmp.m[3].y + tmp.m[3].z + tmp.m[3].w;
 
+    
     return r;
 }
 
@@ -136,6 +137,16 @@
     return m;
 }
 
++(mat4)inverseTranslate:(vec3)vec{
+    
+    mat4 m = [mat4obj init];
+    m.m[3].x = -vec.x;
+    m.m[3].y = -vec.y;
+    m.m[3].z = -vec.z;
+    
+    return m;
+}
+
 +(mat4)scale:(vec3)size{
     
     mat4 m = [mat4obj init];
@@ -145,6 +156,18 @@
     
     return m;
 }
+
++(mat4)inverseScale:(vec3)size{
+    
+    mat4 m = [mat4obj init];
+
+    m.m[0].x = 1/size.x;
+    m.m[1].y = 1/size.y;
+    m.m[2].z = 1/size.z;
+    
+    return m;
+}
+
 
 +(mat4)rotate:(vec3)axis radian:(GLfloat)radian {
     
@@ -178,54 +201,38 @@
     
 }
 
-+(mat4)lookAt:(vec3)eye look:(vec3)look up:(vec3)up{
-    mat4 r;
-    
-    vec3 o = [vec3obj init:look.x-eye.x y:look.y-eye.y z:look.z-eye.z ];
-    
-    vec3 f = [vec3obj normalize:o];
-    vec3 u = [vec3obj normalize:up];
-    vec3 s = [vec3obj normalize:[vec3obj cross:f v1:u]];
-    
-    r.m[0].x = s.x;
-    r.m[1].x = s.y;
-    r.m[2].x = s.z;
-    
-    r.m[0].y = u.x;
-    r.m[1].y = u.y;
-    r.m[2].y = u.z;
 
-    r.m[0].z = -f.x;
-    r.m[1].z = -f.y;
-    r.m[2].z = -f.z;
++(mat4)inverseRotate:(vec3)axis radian:(GLfloat)radian {
     
-    r.m[3].x = -1 * [vec3obj dot:s v1:eye];
-    r.m[3].y = -1 * [vec3obj dot:u v1:eye];
-    r.m[3].z = -1 * [vec3obj dot:f v1:eye];
-
-    r.m[0].w = 0;
-    r.m[1].w = 0;
-    r.m[2].w = 0;
-    r.m[3].w = 0;
+    axis = [vec3obj normalize:axis];
     
-    return r;
+    GLfloat sin = sinf(radian);
+    GLfloat cos = cosf(radian);
+    
+    mat4 m = [mat4obj init];
+    m.m[0].x = (axis.x * axis.x * (1 - cos)) + cos;
+    m.m[0].y = (axis.x * axis.y * (1 - cos)) - (axis.z * sin);
+    m.m[0].z = (axis.x * axis.z * (1 - cos)) + (axis.y * sin);
+    m.m[0].w = 0;
+    
+    m.m[1].x = (axis.y * axis.x * (1 - cos)) + (axis.z * sin);
+    m.m[1].y = (axis.y * axis.y * (1 - cos)) + cos;
+    m.m[1].z = (axis.y * axis.z * (1 - cos)) - (axis.x * sin);
+    m.m[1].w = 0;
+    
+    m.m[2].x = (axis.z * axis.x * (1 - cos)) - (axis.y * sin);
+    m.m[2].y = (axis.z * axis.y * (1 - cos)) + (axis.x * sin);
+    m.m[2].z = (axis.z * axis.z * (1 - cos)) + cos;
+    m.m[2].w = 0;
+    
+    m.m[3].x = 0;
+    m.m[3].y = 0;
+    m.m[3].z = 0;
+    m.m[3].w = 1;
+    
+    return m;
+    
 }
 
-+(mat4)perspective:(GLfloat)near far:(GLfloat)far Yradian:(GLfloat)Yradian aspect:(GLfloat)aspect{
-    
-    mat4 r = [mat4obj init];
-    
-    GLfloat f = 1 / tan(Yradian) / 2;
-    
-    r.m[0].x = f/aspect;
-    r.m[1].y = f;
-    r.m[2].z = (far + near) / (far - near);
-    r.m[2].w = -1;
-    r.m[3].z = (far * near * 2) / (far - near);
-    
-    r.m[3].w = 0;
-
-    return r;
-}
 
 @end

@@ -23,6 +23,7 @@
 		42FA27891B539F8500F7D603 /* vec3obj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27881B539F8500F7D603 /* vec3obj.m */; };
 		42FA278C1B53A0B700F7D603 /* mat4obj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA278B1B53A0B700F7D603 /* mat4obj.m */; };
 		42FA278E1B54327100F7D603 /* matrixTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA278D1B54327100F7D603 /* matrixTests.m */; };
+		42FA27911B5A872500F7D603 /* matCameraObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27901B5A872500F7D603 /* matCameraObj.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,8 @@
 		42FA278A1B53A0B700F7D603 /* mat4obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4obj.h; sourceTree = "<group>"; };
 		42FA278B1B53A0B700F7D603 /* mat4obj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mat4obj.m; sourceTree = "<group>"; };
 		42FA278D1B54327100F7D603 /* matrixTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = matrixTests.m; sourceTree = "<group>"; };
+		42FA278F1B5A872500F7D603 /* matCameraObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matCameraObj.h; sourceTree = "<group>"; };
+		42FA27901B5A872500F7D603 /* matCameraObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = matCameraObj.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +159,8 @@
 				42FA27881B539F8500F7D603 /* vec3obj.m */,
 				42FA278A1B53A0B700F7D603 /* mat4obj.h */,
 				42FA278B1B53A0B700F7D603 /* mat4obj.m */,
+				42FA278F1B5A872500F7D603 /* matCameraObj.h */,
+				42FA27901B5A872500F7D603 /* matCameraObj.m */,
 			);
 			path = matrix;
 			sourceTree = "<group>";
@@ -270,6 +275,7 @@
 				42C6CB9C1AE7B3BD00F0570B /* GLViewController.m in Sources */,
 				42FA278C1B53A0B700F7D603 /* mat4obj.m in Sources */,
 				42FA27891B539F8500F7D603 /* vec3obj.m in Sources */,
+				42FA27911B5A872500F7D603 /* matCameraObj.m in Sources */,
 				42FA27861B538F9A00F7D603 /* vec4obj.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

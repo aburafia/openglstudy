@@ -53,10 +53,10 @@
     
     vec4 r;
 
-    r.x = v.x / len;
-    r.y = v.y / len;
-    r.z = v.z / len;
-    r.w = v.w / len;
+    r.x = len==0 ? 0 : v.x / len;
+    r.y = len==0 ? 0 : v.y / len;
+    r.z = len==0 ? 0 : v.z / len;
+    r.w = len==0 ? 0 : v.w / len;
     
     return r;
 }

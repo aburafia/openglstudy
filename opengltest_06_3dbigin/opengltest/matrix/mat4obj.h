@@ -28,7 +28,5 @@ typedef struct mat4{
 +(mat4) scale:(vec3)size;
 +(mat4) rotate:(vec3)axis radian:(GLfloat)radian;
 
-+(mat4)lookAt:(vec3)eye look:(vec3)look up:(vec3)up;
-+(mat4)perspective:(GLfloat)near far:(GLfloat)far Yradian:(GLfloat)Yradian aspect:(GLfloat)aspect;
 
 @end

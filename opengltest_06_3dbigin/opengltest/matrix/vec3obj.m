@@ -62,9 +62,9 @@
     
     vec3 r;
     
-    r.x = v.x / len;
-    r.y = v.y / len;
-    r.z = v.z / len;
+    r.x = len==0 ? 0 : v.x / len;
+    r.y = len==0 ? 0 : v.y / len;
+    r.z = len==0 ? 0 : v.z / len;
     
     return r;
 }
@@ -95,6 +95,15 @@
     a[2] = v.z;
 }
 
++(vec3) diff:(vec3)v0 v1:(vec3)v1{
+    vec3 r;
+    
+    r.x = v0.x - v1.x;
+    r.y = v0.y - v1.y;
+    r.z = v0.z - v1.z;
+    
+    return r;
+}
 
 
 @end

@@ -22,6 +22,7 @@ typedef struct vec3{
 +(vec3) setLength:(vec3)v len:(GLfloat)len;
 +(vec3) cross:(vec3)v0 v1:(vec3)v1;
 +(GLfloat) dot:(vec3)v0 v1:(vec3)v1;
++(vec3) diff:(vec3)v0 v1:(vec3)v1;
 +(void)copyToArray:(vec3)v a:(GLfloat[3])a;
 
 
