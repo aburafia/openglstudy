@@ -133,14 +133,17 @@
 
 -(vec3) cameraViewCPU:(vec3)vert{
     
-    mat4 viewmat = [matCameraObj viewMat4:0];
+    //ビュー変換行列
+    //mat4 viewmat = [matCameraObj viewMat4:0];
+    //vec3 vert2 = [mat4obj multiplyVec3:vert m:viewmat];
     
-    vec3 vert2 = [mat4obj multiplyVec3:vert m:viewmat];
+    vec3 vert2 = [matCameraObj view:0 v:vert];
     
     //次に射影変換
-    mat4 projectionmat = [matCameraObj perspective:0];
+    //mat4 projectionmat = [matCameraObj perspective:0];
+    //vec3 vert3 = [mat4obj multiplyVec3:vert2 m:projectionmat];
 
-    vec3 vert3 = [mat4obj multiplyVec3:vert2 m:projectionmat];
+    vec3 vert3 = [matCameraObj perspective:0 v:vert2];
     
     return vert3;
 }
@@ -222,8 +225,8 @@
     vec3 campos = [vec3obj init:0.0f y:0.0f z:2.0f];
     vec3 lookpos = [vec3obj init:0.0f y:0.0f z:0.0f];
     vec3 up = [vec3obj init:0 y:1.0 z:0];
-    GLfloat near = 10.0f;
-    GLfloat far = -30.0f;
+    GLfloat near = 0.0f;
+    GLfloat far = 30.0f;
     GLfloat fovYradian = [self deg2rad:60.0f];
     
     float view_width = view.bounds.size.width;

@@ -125,8 +125,20 @@ static caminfo CAMINFOS[4];
     return r;
 }
 
++(vec3)view:(int)camnum v:(vec3)v{
+    
+    vec3 r;
+    
+    mat4 viewmat = [matCameraObj viewMat4:camnum];
+    
+    r = [mat4obj multiplyVec3:v m:viewmat];
+    
+    return r;
+}
+
+
 //射影変換行列
-+(mat4)perspective:(int)camnum{
++(mat4)perspectiveMat4:(int)camnum{
     
     GLfloat near = CAMINFOS[camnum].near;
     GLfloat far = CAMINFOS[camnum].far;
@@ -135,34 +147,44 @@ static caminfo CAMINFOS[4];
     
     mat4 r = [mat4obj init];
     
-    //z=1の時のy=0(カメラが0地点だからね)からみた、カメラに映る高さはいかのとおり。
-    //龍メモ
-    //zは基本マイナスだけど、計算上楽だから、z=1を使ってる。
+    //z=-1の時のy=0(カメラが0地点だからね)からみた、カメラに映る高さはいかのとおり。
+    //しかもどうせ、あとあとzで割られるので、符号は変わらないはず。
     GLfloat heightZ1 = 1 / tan(fovYradian) / 2;
     
     //だって、、、画角半分の上しか見てない、、下も見なきゃじゃない？
     //いらないの？？
-    heightZ1 *= 2;
-    
+    //heightZ1 *= 2;
+
     r.m[0].x = 1 / heightZ1 * aspect;
     r.m[1].y = 1 / heightZ1;
-    //r.m[2].x = 1;
-    //r.m[2].y = 1;
-    r.m[2].z = 1;
-    //r.m[2].w = 1;
     
-    
-    ///このあたりの計算があやしい。。。。。
-    //zに-2.5とかきときにそのまんまだとだめじゃん。
-    
-    r.m[2].z = -1 * far / (far - near);
-    //r.m[2].w = (far * near) / (far - near);
+    r.m[2].z = far / (far - near);
+    r.m[2].w = (far * near) / (far - near);
 
     r.m[3].z = 1;
     r.m[3].w = 0;
     
     return r;
 }
+
++(vec3)perspective:(int)camnum v:(vec3)v{
+    vec3 r;
+    vec4 r4;
+    
+    mat4 perspectivemat = [matCameraObj perspectiveMat4:camnum];
+    
+    vec4 v4;
+    v4.x = v.x;
+    v4.y = v.y;
+    v4.z = v.z;
+    v4.w = v.z;
+    
+    r4 = [mat4obj multiplyVec4:v4 m:perspectivemat];
+    
+    return r;
+
+}
+
 
 
 @end

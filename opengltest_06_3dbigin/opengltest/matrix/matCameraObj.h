@@ -32,9 +32,8 @@ typedef struct caminfo{
        fovYradian:(GLfloat)fovYradian
            aspect:(GLfloat)aspect;
 
-+(mat4)viewMat4:(int)camnum;
-
-+(mat4)perspective:(int)camnum;
++(vec3)view:(int)camnum v:(vec3)v;
++(vec3)perspective:(int)camnum  v:(vec3)v;
 
 
 @end
