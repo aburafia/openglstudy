@@ -74,7 +74,7 @@ static caminfo CAMINFOS[4];
     //でも、カメラはマイナス方向を向いてるはず。みぎて座標系だし。
     //欲しいのは、「カメラのZ軸」であって、注視ベクトルが欲しいわけじゃない。
     //だから、向きを逆にする
-    //camAxis_z = [vec3obj setLength:camAxis_z len:-1];
+    camAxis_z = [vec3obj setLength:camAxis_z len:-1];
     
     r.m[0].x = camAxis_x.x;
     r.m[0].y = camAxis_x.y;
@@ -151,7 +151,11 @@ static caminfo CAMINFOS[4];
     r.m[2].z = 1;
     //r.m[2].w = 1;
     
-    //r.m[2].z = far / (far - near);
+    
+    ///このあたりの計算があやしい。。。。。
+    //zに-2.5とかきときにそのまんまだとだめじゃん。
+    
+    r.m[2].z = -1 * far / (far - near);
     //r.m[2].w = (far * near) / (far - near);
 
     r.m[3].z = 1;
