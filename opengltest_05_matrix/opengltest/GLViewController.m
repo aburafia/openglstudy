@@ -134,7 +134,6 @@
     
     //glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
-
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect

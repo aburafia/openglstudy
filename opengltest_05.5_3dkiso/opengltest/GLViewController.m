@@ -177,11 +177,12 @@
 
 }
 
-float camplus = 0;
+float wwww = 0.1;
+
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    wwww += 0.01;
     
-    camplus += 0.01;
     //[self testDrawTriangle];
     
     //[self cameraRenderingGPU];
@@ -194,43 +195,15 @@ float camplus = 0;
     glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 0.8f);
     
     //三角形の頂点を作る
-    vec3 vert1 = [vec3obj init:0 y:1.0 z:-0.5];
-    vec3 vert2 = [vec3obj init:-0.5 y:0 z:-0.5];
-    vec3 vert3 = [vec3obj init:0.5 y:0 z:-0.5];
+    vec4 vert1 = [vec4obj init:0 y:0.5 z:-0.5 w:wwww];
+    vec4 vert2 = [vec4obj init:-0.5 y:0 z:-0.5 w:wwww];
+    vec4 vert3 = [vec4obj init:0.5 y:0 z:-0.5 w:wwww];
 
-    //カメラのプロパティ。位置、どこをみてるか、カメラの上の方向
-    vec3 campos = [vec3obj init:0.0f y:0.0f z:2.0f];
-    vec3 lookpos = [vec3obj init:0.0f y:0.0f z:0.0f];
-    vec3 up = [vec3obj init:0 y:1.0 z:0];
-    GLfloat near = 1.0f;
-    GLfloat far = 30.0f;
-    GLfloat fovYradian = [self deg2rad:60.0f];
-    
-    float view_width = view.bounds.size.width;
-    float view_height = view.bounds.size.height;
-    GLfloat aspect = view_width/view_height;
-
-    //カメラ情報を登録
-    [matCameraObj setCamInfo:0
-                      campos:campos
-                     lookpos:lookpos
-                          up:up
-                        near:near
-                         far:far
-                  fovYradian:fovYradian
-                      aspect:aspect];
-    
-    //カメラ情報で画面に出すべき座標を計算するよ！
-    //戻り値は、wの値が入ってくるから、vec4だよ
-    vec4 vec4_vert1 = [matCameraObj cameraCalc:vert1 camnum:0];
-    vec4 vec4_vert2 = [matCameraObj cameraCalc:vert2 camnum:0];
-    vec4 vec4_vert3 = [matCameraObj cameraCalc:vert3 camnum:0];
-    
     GLfloat posTri[12];
-    
-    [vec4obj copyToArray:vec4_vert1 a:&posTri[0]];
-    [vec4obj copyToArray:vec4_vert2 a:&posTri[4]];
-    [vec4obj copyToArray:vec4_vert3 a:&posTri[8]];
+
+    [vec4obj copyToArray:vert1 a:&posTri[0]];
+    [vec4obj copyToArray:vert2 a:&posTri[4]];
+    [vec4obj copyToArray:vert3 a:&posTri[8]];
     
     //行列適応後の頂点をおくる。
     glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);

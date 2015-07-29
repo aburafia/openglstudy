@@ -23,7 +23,6 @@ typedef struct mat4{
 +(mat4)multiplyMat4:(mat4)m0 m1:(mat4)m1;
 
 +(void)copyToArray:(mat4)v a:(GLfloat[4][4])a;
-+(void)exportToArrayGLType:(mat4)v a:(GLfloat[4][4])a;
 
 +(mat4) translate:(vec3)vec;
 +(mat4) scale:(vec3)size;

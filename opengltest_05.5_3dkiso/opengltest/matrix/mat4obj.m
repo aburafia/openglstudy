@@ -127,13 +127,6 @@
     a[3][0] = v.m[3].x; a[3][1] = v.m[3].y; a[3][2] = v.m[3].z; a[3][3] = v.m[3].w;
 }
 
-+(void)exportToArrayGLType:(mat4)v a:(GLfloat[4][4])a{
-    a[0][0] = v.m[0].x; a[1][0] = v.m[0].y; a[2][0] = v.m[0].z; a[3][0] = v.m[0].w;
-    a[0][1] = v.m[1].x; a[1][1] = v.m[1].y; a[2][1] = v.m[1].z; a[3][1] = v.m[1].w;
-    a[0][2] = v.m[2].x; a[1][2] = v.m[2].y; a[2][2] = v.m[2].z; a[3][2] = v.m[2].w;
-    a[0][3] = v.m[3].x; a[1][3] = v.m[3].y; a[2][3] = v.m[3].z; a[3][3] = v.m[3].w;
-}
-
 +(mat4)translate:(vec3)vec{
     
     mat4 m = [mat4obj init];
