@@ -128,19 +128,6 @@ static caminfo CAMINFOS[4];
     return r;
 }
 
-//view行列適応。これでカメラが0.0.0からの世界になる
-+(vec3)view:(int)camnum v:(vec3)v{
-    
-    vec3 r;
-    
-    mat4 viewmat = [matCameraObj viewMat4:camnum];
-    
-    r = [mat4obj multiplyVec3:v m:viewmat];
-    
-    return r;
-}
-
-
 //射影変換行列をつくろう
 +(mat4)perspectiveMat4:(int)camnum{
     
@@ -167,24 +154,6 @@ static caminfo CAMINFOS[4];
     r.m[3].w = 0;
     
     return r;
-}
-
-//射影行列適応。Wがはいるから、vec4でかえす
-+(vec4)perspective:(int)camnum v:(vec3)v{
-    vec4 r4;
-    
-    mat4 perspectivemat = [matCameraObj perspectiveMat4:camnum];
-    
-    vec4 v4;
-    v4.x = v.x;
-    v4.y = v.y;
-    v4.z = v.z;
-    v4.w = v.z;
-    
-    r4 = [mat4obj multiplyVec4:v4 m:perspectivemat];
-    
-    return r4;
-
 }
 
 +(vec4)cameraCalc:(vec3)vert camnum:(int)camnum{
