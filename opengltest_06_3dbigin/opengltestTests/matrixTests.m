@@ -37,29 +37,29 @@
 
 -(void)testVec4Normlize{
     
-    vec4 t = [vec4obj init:2 y:2 z:2 w:2];
-    t = [vec4obj normalize:t];
+    vec4* t = [[vec4 alloc] init:2 y:2 z:2 w:2];
+    [t normalize];
     
-    XCTAssertEqual([vec4obj length:t],1.0);
+    XCTAssertEqual([t length],1.0);
 }
 
 -(void)testVec3Normlize{
     
-    vec3 t = [vec3obj init:1 y:1 z:1];
-    t = [vec3obj normalize:t];
+    vec3* t = [[vec3 alloc] init:1 y:1 z:1];
+    [t normalize];
     
     //綺麗な1にはならないね
-    XCTAssertEqual([vec3obj length:t] > 0.99 && [vec3obj length:t] < 1.01, YES);
+    XCTAssertEqual([t length] > 0.99 && [t length] < 1.01, YES);
 }
 
 -(void)testSetLength{
     
-    vec3 t = [vec3obj init:1 y:1 z:1];
-    t = [vec3obj normalize:t];
-    XCTAssertEqual([vec3obj length:t] > 0.99 && [vec3obj length:t] < 1.01, YES);
+    vec3* t = [[vec3 alloc] init:1 y:1 z:1];
+    [t normalize];
+    XCTAssertEqual([t length] > 0.99 && [t length] < 1.01, YES);
     
-    t = [vec3obj setLength:t len:2];
-    XCTAssertEqual([vec3obj length:t] > 1.99 && [vec3obj length:t] < 2.01, YES);
+    [t setLength:2];
+    XCTAssertEqual([t length] > 1.99 && [t length] < 2.01, YES);
 }
 
 -(void)testVec3dot{
@@ -69,19 +69,25 @@
     //http://marupeke296.com/COL_Basic_No1_InnerAndOuterProduct.html
 
     //t0から,単位ベクトルであるtnに正射影（cos）した値
-    vec3 t0 = [vec3obj init:1 y:1 z:0];
-    vec3 tn = [vec3obj normalize:t0];
-    dot = [vec3obj dot:t0 v1:tn];
+    vec3* t0 = [[vec3 alloc] init:1 y:1 z:0];
+    
+    vec3* tn = [t0 copy];
+    [tn normalize];
+    
+    dot = [vec3 dot:t0 v1:tn];
     XCTAssertEqual(dot > 1.414 && dot < 1.415, YES);
     
     //逆方向に-1
-    vec3 t1 = [vec3obj normalize:[vec3obj init:-1 y:-1 z:0]];
-    dot = [vec3obj dot:t1 v1:tn];
+    vec3* t1 = [[vec3 alloc] init:-1 y:-1 z:0];
+    [t1 normalize];
+    
+    dot = [vec3 dot:t1 v1:tn];
     XCTAssertEqual(dot < -0.999 && dot > -1.001, YES);
     
     //同じ方向に２倍の長さだから、２になる
-    vec3 t2 = [vec3obj setLength:tn len:2];
-    dot = [vec3obj dot:t2 v1:tn];
+    vec3* t2 = [tn copy];
+    [t2 setLength:2];
+    dot = [vec3 dot:t2 v1:tn];
     XCTAssertEqual(dot, 2);
     
     //単位ベクトルじゃない場合は？
@@ -103,117 +109,117 @@
 
 -(void)testVec3cross{
     
-    vec3 t0 = [vec3obj init:2 y:0 z:0];
-    vec3 t1 = [vec3obj init:0 y:2 z:0];
+    vec3* t0 = [[vec3 alloc] init:2 y:0 z:0];
+    vec3* t1 = [[vec3 alloc] init:0 y:2 z:0];
     
-    GLfloat len = [vec3obj length:t0];
+    GLfloat len = [t0 length];
     XCTAssertEqual(len, 2);
 
-    vec3 t2 = [vec3obj cross:t0 v1:t1];
-    GLfloat len2 = [vec3obj length:t2];
+    vec3* t2 = [vec3 cross:t0 v1:t1];
+    GLfloat len2 = [t2 length];
     
-    XCTAssertEqual(t2.x, 0);
-    XCTAssertEqual(t2.y, 0);
-    XCTAssertEqual(t2.z, 4);
+    XCTAssertEqual(t2->x, 0);
+    XCTAssertEqual(t2->y, 0);
+    XCTAssertEqual(t2->z, 4);
 
     XCTAssertEqual(len2, 4);
 }
 
--(void)testMultiplyVec4{
+-(void)testVec4xMat4{
     
-    vec4 v;
+    vec4* v = [[vec4 alloc] init];
 
-    v.x = 1.1;
-    v.y = 2.2;
-    v.z = 3.3;
-    v.w = 1;
+    v->x = 1.1;
+    v->y = 2.2;
+    v->z = 3.3;
+    v->w = 1;
     
-    mat4 m = [mat4obj init];
+    mat4* m4 = [[mat4 alloc] init];
     
     //Xに動かそう
-    m.m[3].x = 3;
+    m4->m.row[0].w = 3;
     
-    vec4 r = [mat4obj multiplyVec4:v m:m];
+    vec4* r = [m4 Vec4xMat4:v];
     
-    XCTAssertEqual(r.x > 4.0999 && r.x < 5.0001, YES);
+    XCTAssertEqual(r->x > 4.0999 && r->x < 5.0001, YES);
 }
 
 -(void)testMultiplyVec3{
     
-    vec3 v;
+    vec3* v = [[vec3 alloc] init];
     
-    v.x = 1.1;
-    v.y = 2.2;
-    v.z = 3.3;
+    v->x = 1.1;
+    v->y = 2.2;
+    v->z = 3.3;
     
-    mat4 m = [mat4obj init];
+    mat4* m4 = [[mat4 alloc] init];
     
     //Xに動かそう
-    m.m[3].x = 3;
+    m4->m.row[0].w = 3;
     
-    vec3 r = [mat4obj multiplyVec3:v m:m];
+    vec3* r = [m4 Vec3xMat4:v];
     
-    XCTAssertEqual(r.x > 4.0999 && r.x < 5.0001, YES);
+    XCTAssertEqual(r->x > 4.0999 && r->x < 5.0001, YES);
 }
 
 -(void)testMultiplyMat4{
     
-    mat4 m0 = [mat4obj init];
-    mat4 m1 = [mat4obj init];
+    mat4* m0 = [[mat4 alloc] init];
+    mat4* m1 = [[mat4 alloc] init];
     
-    m0.m[0].x = 1;
-    m0.m[0].y = 2;
-    m0.m[0].z = 3;
-    m0.m[0].w = 4;
+    m0->m.row[0].x = 1;
+    m0->m.row[0].y = 2;
+    m0->m.row[0].z = 3;
+    m0->m.row[0].w = 4;
     
-    m1.m[0].x = 1;
-    m1.m[1].x = 2;
-    m1.m[2].x = 3;
-    m1.m[3].x = 4;
+    m1->m.row[0].x = 1;
+    m1->m.row[1].x = 2;
+    m1->m.row[2].x = 3;
+    m1->m.row[3].x = 4;
     
-    mat4 r = [mat4obj multiplyMat4:m0 m1:m1];
+    mat4* r = [m0 multiplyMat4:m1];
     
-    XCTAssertEqual(r.m[0].x, 30);
-    XCTAssertEqual(r.m[0].y, 2);
+    XCTAssertEqual(r->m.row[0].x, 30);
+    XCTAssertEqual(r->m.row[0].y, 2);
 }
 
 -(void)testTranslate{
     
-    vec3 pos = [vec3obj init:1 y:2 z:3];
-    vec3 mov = [vec3obj init:0 y:12 z:1.7];
+    vec3* pos = [[vec3 alloc] init:1 y:2 z:3];
+    vec3* mov = [[vec3 alloc] init:0 y:12 z:1.7];
     
-    mat4 m = [mat4obj translate:mov];
-    vec3 r = [mat4obj multiplyVec3:pos m:m];
+    mat4* m4 = [mat4 translate:mov];
+    vec3* r = [m4 Vec3xMat4:pos];
     
-    XCTAssertEqual(r.y > 13.999 && r.y < 14.0001, YES);
-    XCTAssertEqual(r.z > 4.6999 && r.z < 4.70001, YES);
+    XCTAssertEqual(r->y > 13.999 && r->y < 14.0001, YES);
+    XCTAssertEqual(r->z > 4.6999 && r->z < 4.70001, YES);
 }
 
 -(void)testScale{
     
-    vec3 vec = [vec3obj init:1 y:2 z:3];
-    vec3 size = [vec3obj init:2 y:2 z:5];
+    vec3* vec = [[vec3 alloc] init:1 y:2 z:3];
+    vec3* size = [[vec3 alloc] init:2 y:2 z:5];
     
-    mat4 m = [mat4obj scale:size];
-    vec3 r = [mat4obj multiplyVec3:vec m:m];
+    mat4* m4 = [mat4 scale:size];
+    vec3* r = [m4 Vec3xMat4:vec];
  
-    XCTAssertEqual(r.x, 2);
-    XCTAssertEqual(r.y, 4);
-    XCTAssertEqual(r.z, 15);
+    XCTAssertEqual(r->x, 2);
+    XCTAssertEqual(r->y, 4);
+    XCTAssertEqual(r->z, 15);
 }
 
 -(void)testRotate{
     
-    vec3 vec = [vec3obj init:1 y:0 z:0];
-    vec3 axis = [vec3obj init:0 y:0 z:1];
+    vec3* vec = [[vec3 alloc] init:1 y:0 z:0];
+    vec3* axis = [[vec3 alloc] init:0 y:0 z:1];
     GLfloat radian = [self deg2rad:-90];
  
-    mat4 m = [mat4obj rotate:axis radian:radian];
-    vec3 r = [mat4obj multiplyVec3:vec m:m];
+    mat4* m4 = [mat4 rotate:axis radian:radian];
+    vec3* r = [m4 Vec3xMat4:vec];
 
-    XCTAssertEqual(r.x < 0.0001 && r.x > -0.0001, YES);
-    XCTAssertEqual(r.y, 1);
-    XCTAssertEqual(r.z, 0);
+    XCTAssertEqual(r->x < 0.0001 && r->x > -0.0001, YES);
+    XCTAssertEqual(r->y, 1);
+    XCTAssertEqual(r->z, 0);
 }
 
 

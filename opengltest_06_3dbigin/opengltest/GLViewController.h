@@ -7,10 +7,10 @@
 //
 
 #import <GLKit/GLKit.h>
-#import "vec3obj.h"
-#import "vec4obj.h"
-#import "mat4obj.h"
-#import "matCameraObj.h"
+#import "vec3.h"
+#import "vec4.h"
+#import "mat4.h"
+#import "camera.h"
 
 @interface GLViewController : GLKViewController
 

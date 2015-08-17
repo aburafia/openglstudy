@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42293B041B6FCC8A00768E0C /* vertObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42293B031B6FCC8A00768E0C /* vertObj.m */; };
+		42293B081B6FCD1A00768E0C /* vec2.m in Sources */ = {isa = PBXBuildFile; fileRef = 42293B071B6FCD1A00768E0C /* vec2.m */; };
 		42C6CB731AE7ADE800F0570B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6CB721AE7ADE800F0570B /* main.m */; };
 		42C6CB761AE7ADE800F0570B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6CB751AE7ADE800F0570B /* AppDelegate.m */; };
 		42C6CB781AE7ADE800F0570B /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 42C6CB771AE7ADE800F0570B /* Shader.fsh */; };
@@ -19,11 +21,11 @@
 		42FA276A1B3F14D600F7D603 /* xbox-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FA27681B3F14D600F7D603 /* xbox-icon.png */; };
 		42FA27801B4910AE00F7D603 /* mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FA277F1B4910AE00F7D603 /* mask.png */; };
 		42FA27821B4910F000F7D603 /* rgb.png in Resources */ = {isa = PBXBuildFile; fileRef = 42FA27811B4910F000F7D603 /* rgb.png */; };
-		42FA27861B538F9A00F7D603 /* vec4obj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27851B538F9A00F7D603 /* vec4obj.m */; };
-		42FA27891B539F8500F7D603 /* vec3obj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27881B539F8500F7D603 /* vec3obj.m */; };
-		42FA278C1B53A0B700F7D603 /* mat4obj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA278B1B53A0B700F7D603 /* mat4obj.m */; };
+		42FA27861B538F9A00F7D603 /* vec4.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27851B538F9A00F7D603 /* vec4.m */; };
+		42FA27891B539F8500F7D603 /* vec3.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27881B539F8500F7D603 /* vec3.m */; };
+		42FA278C1B53A0B700F7D603 /* mat4.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA278B1B53A0B700F7D603 /* mat4.m */; };
 		42FA278E1B54327100F7D603 /* matrixTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA278D1B54327100F7D603 /* matrixTests.m */; };
-		42FA27911B5A872500F7D603 /* matCameraObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27901B5A872500F7D603 /* matCameraObj.m */; };
+		42FA27911B5A872500F7D603 /* camera.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FA27901B5A872500F7D603 /* camera.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42293B021B6FCC8A00768E0C /* vertObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vertObj.h; sourceTree = "<group>"; };
+		42293B031B6FCC8A00768E0C /* vertObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vertObj.m; sourceTree = "<group>"; };
+		42293B061B6FCD1A00768E0C /* vec2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec2.h; sourceTree = "<group>"; };
+		42293B071B6FCD1A00768E0C /* vec2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vec2.m; sourceTree = "<group>"; };
 		42C6CB6D1AE7ADE800F0570B /* opengltest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = opengltest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C6CB711AE7ADE800F0570B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42C6CB721AE7ADE800F0570B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -55,15 +61,15 @@
 		42FA27681B3F14D600F7D603 /* xbox-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "xbox-icon.png"; sourceTree = "<group>"; };
 		42FA277F1B4910AE00F7D603 /* mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mask.png; sourceTree = "<group>"; };
 		42FA27811B4910F000F7D603 /* rgb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rgb.png; sourceTree = "<group>"; };
-		42FA27841B538F9A00F7D603 /* vec4obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec4obj.h; sourceTree = "<group>"; };
-		42FA27851B538F9A00F7D603 /* vec4obj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vec4obj.m; sourceTree = "<group>"; };
-		42FA27871B539F8500F7D603 /* vec3obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec3obj.h; sourceTree = "<group>"; };
-		42FA27881B539F8500F7D603 /* vec3obj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vec3obj.m; sourceTree = "<group>"; };
-		42FA278A1B53A0B700F7D603 /* mat4obj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4obj.h; sourceTree = "<group>"; };
-		42FA278B1B53A0B700F7D603 /* mat4obj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mat4obj.m; sourceTree = "<group>"; };
+		42FA27841B538F9A00F7D603 /* vec4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec4.h; sourceTree = "<group>"; };
+		42FA27851B538F9A00F7D603 /* vec4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vec4.m; sourceTree = "<group>"; };
+		42FA27871B539F8500F7D603 /* vec3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec3.h; sourceTree = "<group>"; };
+		42FA27881B539F8500F7D603 /* vec3.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vec3.m; sourceTree = "<group>"; };
+		42FA278A1B53A0B700F7D603 /* mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
+		42FA278B1B53A0B700F7D603 /* mat4.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mat4.m; sourceTree = "<group>"; };
 		42FA278D1B54327100F7D603 /* matrixTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = matrixTests.m; sourceTree = "<group>"; };
-		42FA278F1B5A872500F7D603 /* matCameraObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matCameraObj.h; sourceTree = "<group>"; };
-		42FA27901B5A872500F7D603 /* matCameraObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = matCameraObj.m; sourceTree = "<group>"; };
+		42FA278F1B5A872500F7D603 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		42FA27901B5A872500F7D603 /* camera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = camera.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,14 +159,18 @@
 		42FA27831B538F7300F7D603 /* matrix */ = {
 			isa = PBXGroup;
 			children = (
-				42FA27841B538F9A00F7D603 /* vec4obj.h */,
-				42FA27851B538F9A00F7D603 /* vec4obj.m */,
-				42FA27871B539F8500F7D603 /* vec3obj.h */,
-				42FA27881B539F8500F7D603 /* vec3obj.m */,
-				42FA278A1B53A0B700F7D603 /* mat4obj.h */,
-				42FA278B1B53A0B700F7D603 /* mat4obj.m */,
-				42FA278F1B5A872500F7D603 /* matCameraObj.h */,
-				42FA27901B5A872500F7D603 /* matCameraObj.m */,
+				42293B061B6FCD1A00768E0C /* vec2.h */,
+				42293B071B6FCD1A00768E0C /* vec2.m */,
+				42FA27871B539F8500F7D603 /* vec3.h */,
+				42FA27881B539F8500F7D603 /* vec3.m */,
+				42FA27841B538F9A00F7D603 /* vec4.h */,
+				42FA27851B538F9A00F7D603 /* vec4.m */,
+				42FA278A1B53A0B700F7D603 /* mat4.h */,
+				42FA278B1B53A0B700F7D603 /* mat4.m */,
+				42FA278F1B5A872500F7D603 /* camera.h */,
+				42FA27901B5A872500F7D603 /* camera.m */,
+				42293B021B6FCC8A00768E0C /* vertObj.h */,
+				42293B031B6FCC8A00768E0C /* vertObj.m */,
 			);
 			path = matrix;
 			sourceTree = "<group>";
@@ -270,13 +280,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42293B041B6FCC8A00768E0C /* vertObj.m in Sources */,
 				42C6CB761AE7ADE800F0570B /* AppDelegate.m in Sources */,
 				42C6CB731AE7ADE800F0570B /* main.m in Sources */,
 				42C6CB9C1AE7B3BD00F0570B /* GLViewController.m in Sources */,
-				42FA278C1B53A0B700F7D603 /* mat4obj.m in Sources */,
-				42FA27891B539F8500F7D603 /* vec3obj.m in Sources */,
-				42FA27911B5A872500F7D603 /* matCameraObj.m in Sources */,
-				42FA27861B538F9A00F7D603 /* vec4obj.m in Sources */,
+				42293B081B6FCD1A00768E0C /* vec2.m in Sources */,
+				42FA278C1B53A0B700F7D603 /* mat4.m in Sources */,
+				42FA27891B539F8500F7D603 /* vec3.m in Sources */,
+				42FA27911B5A872500F7D603 /* camera.m in Sources */,
+				42FA27861B538F9A00F7D603 /* vec4.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
