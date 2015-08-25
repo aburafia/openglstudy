@@ -152,13 +152,13 @@
     
     //ビュー変換行列つくろう
     mat4* view = [self viewMat4];
-    GLfloat viewarr[4][4];
-    [view exportToArrayGLType:viewarr];
+    //GLfloat viewarr[4][4];
+    //[view exportToArrayGLType:viewarr];
     
     //射影変換行列つくろう
     mat4* parspective = [self perspectiveMat4];
-    GLfloat parspectivearr[4][4];
-    [parspective exportToArrayGLType:parspectivearr];
+    //GLfloat parspectivearr[4][4];
+    //[parspective exportToArrayGLType:parspectivearr];
     
     //射影×ビュー変換行列
     mat4* mat1 = [parspective multiplyMat4:view];

@@ -10,7 +10,6 @@
 
 @implementation vec4
 
-
 -(vec4*) init{
     
     x = 0;

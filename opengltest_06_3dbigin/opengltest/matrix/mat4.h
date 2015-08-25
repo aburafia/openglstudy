@@ -26,7 +26,7 @@ typedef struct mat4raw{
 -(vec4*)Vec4xMat4:(vec4*)v;
 -(mat4*)multiplyMat4:(mat4*)m;
 -(void)exportArray:(GLfloat[4][4])a;
--(void)exportToArrayGLType:(GLfloat[4][4])a;
+-(void)exportArrayGLType:(GLfloat[4][4])a;
 
 +(mat4raw) tani;
 +(mat4*) translate:(vec3*)vec;

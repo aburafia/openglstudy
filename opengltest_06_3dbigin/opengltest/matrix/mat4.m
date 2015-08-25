@@ -139,7 +139,7 @@
     a[3][0] = m.row[3].x; a[3][1] = m.row[3].y; a[3][2] = m.row[3].z; a[3][3] = m.row[3].w;
 }
 
--(void)exportToArrayGLType:(GLfloat[4][4])a{
+-(void)exportArrayGLType:(GLfloat[4][4])a{
     a[0][0] = m.row[0].x; a[1][0] = m.row[0].y; a[2][0] = m.row[0].z; a[3][0] = m.row[0].w;
     a[0][1] = m.row[1].x; a[1][1] = m.row[1].y; a[2][1] = m.row[1].z; a[3][1] = m.row[1].w;
     a[0][2] = m.row[2].x; a[1][2] = m.row[2].y; a[2][2] = m.row[2].z; a[3][2] = m.row[2].w;

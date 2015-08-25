@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
-#import "vec3obj.h"
-#import "vec4obj.h"
-#import "mat4obj.h"
+#import "vec3.h"
+#import "vec4.h"
+#import "mat4.h"
 
 @interface matrixTests : XCTestCase
 

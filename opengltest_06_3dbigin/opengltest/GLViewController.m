@@ -22,6 +22,7 @@
     
     GLint _unif_loockat; //支店変換
     GLint _unif_projection; //カメラ位置
+    GLint _unif_loockat_x_projection; //カメラ位置
     
     camera* cam;
 }
@@ -120,40 +121,86 @@
                                 aspect:aspect];
 }
 
-/*
+
 -(void) cameraRenderingGPU{
     
-    vec3 _campos = campos;
-    vec3 lookpos = [vec3obj init:0 y:0 z:0];
-    vec3 up = [vec3obj init:0 y:1 z:0];
+    //水色で背景塗りつぶす
+    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    mat4 lookAt = [matCameraObj viewMat4:_campos lookpos:lookpos up:up];
-    GLfloat lookAtArray[4][4];
-    [mat4obj copyToArray:lookAt a:lookAtArray];
+    //三角形の色指定
+    glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.7f);
     
-    float view_width = view.bounds.size.width;
-    float view_height = view.bounds.size.height;
+    //View行列を取得して転送
+    GLfloat lookat[4][4];
+    [[cam viewMat4] exportArrayGLType:lookat];
+    glUniformMatrix4fv(_unif_loockat, 1, GL_FALSE, (GLfloat*)lookat );
     
-    GLfloat near = 1.0f;
-    GLfloat far = 30.0f;
-    GLfloat fovYradian = [self deg2rad:45.0f];
-    GLfloat aspect = view_width/view_height;
+    //射影行列を取得して転送
+    GLfloat projection[4][4];
+    [[cam perspectiveMat4] exportArrayGLType:projection];
+    glUniformMatrix4fv(_unif_projection, 1, GL_FALSE, (GLfloat*)projection);
     
-    mat4 projection = [matCameraObj perspective:near far:far fovYradian:fovYradian aspect:aspect];
-    GLfloat projectionArray[4][4];
+    //なんか行列を転送しただけじゃ、だめなの、、、、、
+    //自前で掛け算しないとだめなかんじ、、、なんで、、、
+    //exportToArrayGLType
+    //これがだめ？？
+    GLfloat calc[4][4];
+    mat4* view2 = [cam viewMat4];
+    mat4* parspective = [cam perspectiveMat4];
+    mat4* mat1 = [parspective multiplyMat4:view2];
+    [mat1 exportArrayGLType:calc];
+    glUniformMatrix4fv(_unif_loockat_x_projection, 1, GL_FALSE, (GLfloat*)calc);
+
+    //三角形の頂点を作って転送
+    GLfloat posTri[3][4];
+
+    vec4* vert1 = [[vec4 alloc] init:0 y:1.0 z:-0.3 w:1];
+    vec4* vert2 = [[vec4 alloc] init:-0.5 y:0 z:-0.3 w:1];
+    vec4* vert3 = [[vec4 alloc] init:0.5 y:0 z:-0.3 w:1];
     
-    [mat4obj copyToArray:projection a:projectionArray];
+    [vert1 exportArray:&posTri[0][0]];
+    [vert2 exportArray:&posTri[1][0]];
+    [vert3 exportArray:&posTri[2][0]];
     
-    //行列を転送しとく
-    glUniformMatrix4fv(_unif_loockat, 1, GL_FALSE, (GLfloat*)lookAtArray);
-    glUniformMatrix4fv(_unif_projection, 1, GL_FALSE, (GLfloat*)projectionArray);
+    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
     
+    //描画
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+
 }
-*/
+
 
 -(void) cameraRenderCPU{
     
-
+    //水色で背景塗りつぶす
+    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    //三角形の色指定
+    glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.7f);
+    
+    //三角形の頂点を作る
+    vec3* vert1 = [[vec3 alloc] init:0 y:1.0 z:-0.3];
+    vec3* vert2 = [[vec3 alloc] init:-0.5 y:0 z:-0.3];
+    vec3* vert3 = [[vec3 alloc] init:0.5 y:0 z:-0.3];
+    
+    //カメラ情報で画面に出すべき座標を計算するよ！
+    //戻り値は、wの値が入ってくるから、vec4だよ
+    vec4* vec4_vert1 = [cam cameraCalc:vert1];
+    vec4* vec4_vert2 = [cam cameraCalc:vert2];
+    vec4* vec4_vert3 = [cam cameraCalc:vert3];
+    
+    GLfloat posTri[3][4];
+    
+    [vec4_vert1 exportArray:&posTri[0][0]];
+    [vec4_vert2 exportArray:&posTri[1][0]];
+    [vec4_vert3 exportArray:&posTri[2][0]];
+    
+    //行列適応後の頂点をおくる。
+    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+    
 }
 
 -(GLfloat)deg2rad:(GLfloat)deg{
@@ -194,62 +241,17 @@
 
 }
 
+float aa;
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-
+    //カメラを回してみよう
+    aa += 0.1;
     //[self testDrawTriangle];
+    cam->campos->x = sinf(aa)*3;
+    cam->campos->z = cosf(aa)*3;
+    //NSLog(@"aa=%f x=%f z=%f¥n",aa, cam->campos->x, cam->campos->z);
     
-    //水色で背景塗りつぶす
-    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    //三角形の色指定
-    glUniform4f(_unif_color, 1.0f, 1.0f, 1.0f, 0.8f);
-    
-    //三角形の頂点を作る
-    vec3* vert1 = [[vec3 alloc] init:0 y:1.0 z:-0.3];
-    vec3* vert2 = [[vec3 alloc] init:-0.5 y:0 z:-0.3];
-    vec3* vert3 = [[vec3 alloc] init:0.5 y:0 z:-0.3];
-
-    //カメラ情報で画面に出すべき座標を計算するよ！
-    //戻り値は、wの値が入ってくるから、vec4だよ
-    vec4* vec4_vert1 = [cam cameraCalc:vert1];
-    vec4* vec4_vert2 = [cam cameraCalc:vert2];
-    vec4* vec4_vert3 = [cam cameraCalc:vert3];
-    
-    GLfloat posTri[3][4];
-    
-    [vec4_vert1 exportArray:&posTri[0][0]];
-    [vec4_vert2 exportArray:&posTri[1][0]];
-    [vec4_vert3 exportArray:&posTri[2][0]];
-    
-    //行列適応後の頂点をおくる。
-    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
-    
-    
-    //三角形の色指定
-    glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.8f);
-
-    //三角形の頂点を作る
-    vert1 = [[vec3 alloc] init:0 y:1.0 z:-0.7];
-    vert2 = [[vec3 alloc] init:-0.5 y:0 z:-0.7];
-    vert3 = [[vec3 alloc] init:0.5 y:0 z:-0.7];
-    
-    //カメラ情報で画面に出すべき座標を計算するよ！
-    //戻り値は、wの値が入ってくるから、vec4だよ
-    vec4_vert1 = [cam cameraCalc:vert1];
-    vec4_vert2 = [cam cameraCalc:vert2];
-    vec4_vert3 = [cam cameraCalc:vert3];
-    
-    [vec4_vert1 exportArray:&posTri[0][0]];
-    [vec4_vert2 exportArray:&posTri[1][0]];
-    [vec4_vert3 exportArray:&posTri[2][0]];
-    
-    //行列適応後の頂点をおくる。
-    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
-    
+    [self cameraRenderingGPU];
 
 }
 
