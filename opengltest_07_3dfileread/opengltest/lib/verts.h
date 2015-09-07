@@ -11,7 +11,7 @@
 #import "vert.h"
 
 typedef struct indexTriangle{
-    int a, b, c;
+    GLshort a, b, c;
 }indexTriangle;
 
 @interface verts : NSObject{
@@ -25,9 +25,12 @@ typedef struct indexTriangle{
 
 -(void)addVert:(vert*)v;
 -(void)addVert:(GLfloat)x y:(GLfloat)y z:(GLfloat)z u:(GLfloat)u v:(GLfloat)v;
--(void)addTriangle:(int)a b:(int)b c:(int)c;
+-(void)addTriangle:(GLshort)a b:(GLshort)b c:(GLshort)c;
 
--(void)indexExportToArray:(indexTriangle*)_array;
+-(int)getIndexCount;
+-(int)getVertCount;
+
+-(void)indexExportToArray:(GLshort*)_array;
 -(void)vertExportToArray:(vertraw*)_array vertcount:(int)vertcount;
 
 -(void)draw;

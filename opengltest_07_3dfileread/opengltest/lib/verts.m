@@ -17,6 +17,14 @@
     return self;
 }
 
+-(int)getIndexCount{
+    return (int)index_array.count * 3;
+}
+
+-(int)getVertCount{
+    return (int)vert_array.count;
+}
+
 -(void)addVert:(vert*)v{
     [vert_array addObject:v];
 }
@@ -28,25 +36,28 @@
 }
 
 
--(void)addTriangle:(int)a b:(int)b c:(int)c{
+-(void)addTriangle:(GLshort)a b:(GLshort)b c:(GLshort)c{
     indexTriangle i = (indexTriangle){a,b,c};
     NSValue* obj = [NSValue value:&i withObjCType:@encode(indexTriangle)];
     [index_array addObject:obj];
 }
 
--(void)indexExportToArray:(indexTriangle*)array_holder{
+-(void)indexExportToArray:(GLshort*)array_holder {
 
-    int count = (int)index_array.count;
-    indexTriangle struct_list[count];
+    int count = [self getIndexCount];
+    //indexTriangle struct_list[count];
     
     for(int i=0; i<count; i++){
         NSValue* v = [index_array objectAtIndex:i];
         indexTriangle it;
         [v getValue:&it];
-        struct_list[i] = it;
+        array_holder[i] = it.a;
+        i++;
+        array_holder[i] = it.b;
+        i++;
+        array_holder[i] = it.c;
     }
     
-    array_holder = struct_list;
 }
 
 -(void)vertExportToArray:(vertraw*)array_holder vertcount:(int)vertcount{
