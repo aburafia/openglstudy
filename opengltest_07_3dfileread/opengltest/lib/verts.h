@@ -28,7 +28,7 @@ typedef struct indexTriangle{
 -(void)addTriangle:(int)a b:(int)b c:(int)c;
 
 -(void)indexExportToArray:(indexTriangle*)_array;
--(void)vertExportToArray:(vertraw*)_array;
+-(void)vertExportToArray:(vertraw*)_array vertcount:(int)vertcount;
 
 -(void)draw;
 

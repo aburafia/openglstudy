@@ -150,9 +150,7 @@
     [mat1 exportArrayGLType:calc];
     glUniformMatrix4fv(_unif_cammat4, 1, GL_FALSE, (GLfloat*)calc);
 
-    //三角形の頂点を作って転送
-    //vertraw posTri[4];
-    
+
     verts* vlist = [[verts alloc] init];
     
     [vlist addVert:-0.5 y:-0.5 z:-0.5 u:0 v:0];
@@ -160,33 +158,18 @@
     [vlist addVert:0.5 y:-0.5 z:-0.5 u:1 v:0];
     [vlist addVert:0.5 y:0.5 z:-0.5 u:1 v:1];
     
-    [vlist draw];
+    //[vlist draw];
 
-    /*
-    vert* vert1 = [[vert alloc] init:[[vec4 alloc] init:-0.5 y:-0.50 z:-0.5 w:1]
-                                  uv:[[vec2 alloc] init:0 y:0]];
-
-    vert* vert2 = [[vert alloc] init:[[vec4 alloc] init:-0.5 y:0.5 z:-0.5 w:1]
-                                  uv:[[vec2 alloc] init:0 y:1]];
-
-    vert* vert3 = [[vert alloc] init:[[vec4 alloc] init:0.5 y:-0.5 z:-0.5 w:1]
-                                  uv:[[vec2 alloc] init:1 y:0]];
+    //三角形の頂点を作って転送
+    int count = 4;//(int)vert_array.count;
+    vertraw posTri[count];
     
-    vert* vert4 = [[vert alloc] init:[[vec4 alloc] init:0.5 y:0.5 z:-0.5 w:1]
-                                  uv:[[vec2 alloc] init:1 y:1]];
+    [vlist vertExportToArray:posTri vertcount:count];
     
-    */
-    
-    /*
-    posTri[0] = [vert1 exportRaw];
-    posTri[1] = [vert2 exportRaw];
-    posTri[2] = [vert3 exportRaw];
-    posTri[3] = [vert4 exportRaw];
-
     glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)posTri);
     
     glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)((GLubyte*)posTri + sizeof(vec4raw)));
-    */
+
     
     //描画
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

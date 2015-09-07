@@ -49,28 +49,19 @@
     array_holder = struct_list;
 }
 
--(void)vertExportToArray:(vertraw*)array_holder{
+-(void)vertExportToArray:(vertraw*)array_holder vertcount:(int)vertcount{
     
-    int count = (int)vert_array.count;
-    vertraw struct_list[count];
-    
-    for(int i=0; i<count; i++){
+    for(int i=0; i<vertcount; i++){
         vert* v = [vert_array objectAtIndex:i];
-        struct_list[i] = [v exportRaw];
+        vertraw vr = [v exportRaw];
+        array_holder[i] = vr;
     }
-    
-    array_holder = struct_list;
+
 }
 
 -(void)draw{
     
-    vertraw posTri[4];
-    [self vertExportToArray:posTri];
-    
-    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)posTri);
-    
-    glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)((GLubyte*)posTri + sizeof(vec4raw)));    
-    
+
 }
 
 @end
