@@ -17,12 +17,13 @@
     GLuint _program;
     
     GLint _attr_pos;
+    GLint _attr_uv;
 
     GLint _unif_color;
-    
-    GLint _unif_lookat; //支店変換
-    GLint _unif_projection; //カメラ位置
-    GLint _unif_loockat_x_projection; //カメラ位置
+
+    GLint _unif_texture;
+
+    GLint _unif_cammat4; //カメラ行列
     
     camera* cam;
 }
@@ -82,16 +83,17 @@
 
     //頂点引数を取得する
     _attr_pos = glGetAttribLocation(_program, "attr_pos");
+    _attr_uv = glGetAttribLocation(_program, "attr_uv");
     
     //固定引数を取得する
+    _unif_texture = glGetUniformLocation(_program, "unif_texture");
     _unif_color = glGetUniformLocation(_program, "unif_color");
-    _unif_lookat = glGetUniformLocation(_program, "unif_lookat");
-    _unif_projection = glGetUniformLocation(_program, "unif_projection");
+    _unif_cammat4 = glGetUniformLocation(_program, "unif_cammat4");
 
-    
     //頂点シェーダへの引数割り当てを有効にする
     glEnableVertexAttribArray(_attr_pos);
-    
+    glEnableVertexAttribArray(_attr_uv);
+
     //シェーダーの利用を開始
     glUseProgram(_program);
     
@@ -122,6 +124,10 @@
                                    far:far
                             fovYradian:fovYradian
                                 aspect:aspect];
+    
+    //テクスチャを読み込む
+    [self textureload:@"xbox-icon.png" textureUniteId:GL_TEXTURE0];
+
 }
 
 
@@ -131,47 +137,59 @@
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    //テクスチャの指定
+    glUniform1i(_unif_texture, 0);
+
     //三角形の色指定
-    glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.7f);
+    //glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.7f);
     
-    //View行列を取得して転送
-    GLfloat lookat[4][4];
-    [[cam viewMat4] exportArrayGLType:lookat];
-    glUniformMatrix4fv(_unif_lookat, 1, GL_FALSE, (GLfloat*)lookat );
-    
-    //射影行列を取得して転送
-    GLfloat projection[4][4];
-    [[cam perspectiveMat4] exportArrayGLType:projection];
-    glUniformMatrix4fv(_unif_projection, 1, GL_FALSE, (GLfloat*)projection);
-    
-    
-    
-    //なんか行列を転送しただけじゃ、だめなの、、、、、
-    //自前で掛け算しないとだめなかんじ、、、なんで、、、
-    //exportToArrayGLType
-    //これがだめ？？
     GLfloat calc[4][4];
     mat4* view2 = [cam viewMat4];
     mat4* parspective = [cam perspectiveMat4];
     mat4* mat1 = [parspective multiplyMat4:view2];
     [mat1 exportArrayGLType:calc];
-    glUniformMatrix4fv(_unif_loockat_x_projection, 1, GL_FALSE, (GLfloat*)calc);
+    glUniformMatrix4fv(_unif_cammat4, 1, GL_FALSE, (GLfloat*)calc);
 
     //三角形の頂点を作って転送
-    GLfloat posTri[3][4];
+    //vertraw posTri[4];
+    
+    verts* vlist = [[verts alloc] init];
+    
+    [vlist addVert:-0.5 y:-0.5 z:-0.5 u:0 v:0];
+    [vlist addVert:-0.5 y:0.5 z:-0.5 u:0 v:1];
+    [vlist addVert:0.5 y:-0.5 z:-0.5 u:1 v:0];
+    [vlist addVert:0.5 y:0.5 z:-0.5 u:1 v:1];
+    
+    [vlist draw];
 
-    vec4* vert1 = [[vec4 alloc] init:0 y:0.5 z:-0.5 w:1];
-    vec4* vert2 = [[vec4 alloc] init:-0.5 y:0 z:-0.5 w:1];
-    vec4* vert3 = [[vec4 alloc] init:0.5 y:0 z:-0.5 w:1];
+    /*
+    vert* vert1 = [[vert alloc] init:[[vec4 alloc] init:-0.5 y:-0.50 z:-0.5 w:1]
+                                  uv:[[vec2 alloc] init:0 y:0]];
+
+    vert* vert2 = [[vert alloc] init:[[vec4 alloc] init:-0.5 y:0.5 z:-0.5 w:1]
+                                  uv:[[vec2 alloc] init:0 y:1]];
+
+    vert* vert3 = [[vert alloc] init:[[vec4 alloc] init:0.5 y:-0.5 z:-0.5 w:1]
+                                  uv:[[vec2 alloc] init:1 y:0]];
     
-    [vert1 exportArray:&posTri[0][0]];
-    [vert2 exportArray:&posTri[1][0]];
-    [vert3 exportArray:&posTri[2][0]];
+    vert* vert4 = [[vert alloc] init:[[vec4 alloc] init:0.5 y:0.5 z:-0.5 w:1]
+                                  uv:[[vec2 alloc] init:1 y:1]];
     
-    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
+    */
+    
+    /*
+    posTri[0] = [vert1 exportRaw];
+    posTri[1] = [vert2 exportRaw];
+    posTri[2] = [vert3 exportRaw];
+    posTri[3] = [vert4 exportRaw];
+
+    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)posTri);
+    
+    glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)((GLubyte*)posTri + sizeof(vec4raw)));
+    */
     
     //描画
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 }
 
@@ -299,7 +317,7 @@ float aaa = 0;
     mat4* rot = [[mat4 alloc] init];
     GLfloat rotArray[4][4];
     [rot exportArray:rotArray];
-    glUniformMatrix4fv(_unif_lookat, 1, GL_FALSE, (GLfloat*)rotArray);
+    glUniformMatrix4fv(_unif_cammat4, 1, GL_FALSE, (GLfloat*)rotArray);
     
     //2Dの三角形を、Z軸で回転させたい
     mat4* rotate_m = [mat4 rotate:[[vec3 alloc] init:0 y:0 z:1] radian: aaa];

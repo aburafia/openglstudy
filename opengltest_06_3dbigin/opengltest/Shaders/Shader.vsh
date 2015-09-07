@@ -13,7 +13,7 @@ uniform mediump mat4 unif_lookat_x_projection;
 
 void main()
 {
-    //gl_Position = unif_lookat * attr_pos  * unif_projection ;
-    gl_Position = unif_lookat_x_projection * attr_pos ;
+    gl_Position = unif_projection * unif_lookat * attr_pos;
+    //gl_Position = unif_lookat_x_projection * attr_pos ;
     //gl_Position = attr_pos;
 }
