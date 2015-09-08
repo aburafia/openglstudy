@@ -160,32 +160,36 @@
     GLfloat top = 0.5;
     GLfloat bottom = -0.5;
     
-    
-    
     [vlist addVert:left y:top z:front u:0 v:1];
-    [vlist addVert:left y:top z:back u:0 v:0];
+    [vlist addVert:left y:top z:back u:0 v:0]; //1
     [vlist addVert:right y:top z:front u:1 v:1];
-    [vlist addVert:right y:top z:back u:1 v:0];
+    [vlist addVert:right y:top z:back u:1 v:0]; //3
     [vlist addVert:left y:bottom z:front u:1 v:1];
-    [vlist addVert:left y:bottom z:back u:1 v:0];
+    [vlist addVert:left y:bottom z:back u:1 v:0];  //5
     [vlist addVert:right y:bottom z:front u:0 v:1];
     [vlist addVert:right y:bottom z:back u:0 v:0];
+
+
+     [vlist addTriangle:0 b:1 c:2];
+     [vlist addTriangle:2 b:1 c:3];
+     [vlist addTriangle:2 b:3 c:6];
+     [vlist addTriangle:6 b:3 c:7];
+     [vlist addTriangle:6 b:7 c:4];
+     [vlist addTriangle:4 b:7 c:5];
+     [vlist addTriangle:4 b:5 c:0];
+     [vlist addTriangle:0 b:5 c:1];
+     [vlist addTriangle:1 b:5 c:3];
+     [vlist addTriangle:3 b:5 c:7];
+     [vlist addTriangle:0 b:2 c:4];
+     [vlist addTriangle:4 b:2 c:6];
+
     
-    [vlist addTriangle:0 b:1 c:2];
-    [vlist addTriangle:2 b:1 c:3];
-    [vlist addTriangle:2 b:3 c:6];
-    [vlist addTriangle:6 b:3 c:7];
-    [vlist addTriangle:6 b:7 c:4];
-    [vlist addTriangle:4 b:7 c:5];
-    [vlist addTriangle:4 b:5 c:0];
-    [vlist addTriangle:0 b:5 c:1];
-    [vlist addTriangle:1 b:5 c:3];
-    [vlist addTriangle:3 b:5 c:7];
-    [vlist addTriangle:0 b:2 c:4];
-    [vlist addTriangle:4 b:2 c:6];
+
     
+
     
-    //[vlist draw];
+    //全面
+    //[vlist addTriangle:0 b:2 c:4];
 
     //三角形の頂点を作って転送
     int count = [vlist getVertCount];
@@ -197,14 +201,16 @@
     
     glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)((GLubyte*)posTri + sizeof(vec4raw)));
 
-    count = [vlist getIndexCount];
+    count = [vlist getTriangleCount] * 3;
     GLshort idxTri[count];
     [vlist indexExportToArray:idxTri];
     
-    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, idxTri);
+    //glCullFace(GL_FRONT);
     
+    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, idxTri);
+
     //描画
-    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
 }
 

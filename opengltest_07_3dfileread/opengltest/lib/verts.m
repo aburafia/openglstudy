@@ -12,13 +12,13 @@
 
 -(verts*)init{
     vert_array = [NSMutableArray array];
-    index_array = [NSMutableArray array];
+    triangle_array = [NSMutableArray array];
     
     return self;
 }
 
--(int)getIndexCount{
-    return (int)index_array.count * 3;
+-(int)getTriangleCount{
+    return (int)triangle_array.count;
 }
 
 -(int)getVertCount{
@@ -37,25 +37,27 @@
 
 
 -(void)addTriangle:(GLshort)a b:(GLshort)b c:(GLshort)c{
-    indexTriangle i = (indexTriangle){a,b,c};
-    NSValue* obj = [NSValue value:&i withObjCType:@encode(indexTriangle)];
-    [index_array addObject:obj];
+    Triangle i = (Triangle){a,b,c};
+    NSValue* obj = [NSValue value:&i withObjCType:@encode(Triangle)];
+    [triangle_array addObject:obj];
 }
 
 -(void)indexExportToArray:(GLshort*)array_holder {
 
-    int count = [self getIndexCount];
+    int count = [self getTriangleCount];
     //indexTriangle struct_list[count];
     
-    for(int i=0; i<count; i++){
-        NSValue* v = [index_array objectAtIndex:i];
-        indexTriangle it;
+    int i = 0;
+    for(int j=0; j<count; j++){
+        NSValue* v = [triangle_array objectAtIndex:j];
+        Triangle it;
         [v getValue:&it];
         array_holder[i] = it.a;
         i++;
         array_holder[i] = it.b;
         i++;
         array_holder[i] = it.c;
+        i++;
     }
     
 }

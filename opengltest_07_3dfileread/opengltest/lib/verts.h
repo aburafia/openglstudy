@@ -10,15 +10,15 @@
 #import <GLKit/GLKit.h>
 #import "vert.h"
 
-typedef struct indexTriangle{
+typedef struct Triangle{
     GLshort a, b, c;
-}indexTriangle;
+}Triangle;
 
 @interface verts : NSObject{
     GLint _attr_pos;
     GLint _attr_uv;
     NSMutableArray* vert_array;
-    NSMutableArray* index_array;
+    NSMutableArray* triangle_array;
 }
 
 -(verts*)init;
@@ -27,7 +27,7 @@ typedef struct indexTriangle{
 -(void)addVert:(GLfloat)x y:(GLfloat)y z:(GLfloat)z u:(GLfloat)u v:(GLfloat)v;
 -(void)addTriangle:(GLshort)a b:(GLshort)b c:(GLshort)c;
 
--(int)getIndexCount;
+-(int)getTriangleCount;
 -(int)getVertCount;
 
 -(void)indexExportToArray:(GLshort*)_array;
