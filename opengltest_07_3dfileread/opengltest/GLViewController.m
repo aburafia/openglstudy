@@ -103,13 +103,13 @@
     
     //カメラの設定
     //カメラのプロパティ。位置、どこをみてるか、カメラの上の方向
-    vec3* campos = [[vec3 alloc] init:0.0f y:0.0f z:2.0f];
+    vec3* campos = [[vec3 alloc] init:3.0f y:3.0f z:-5.0f];
     vec3* lookpos = [[vec3 alloc] init:0.0f y:0.0f z:0.0f];
     vec3* up = [[vec3 alloc] init:0 y:1.0 z:0];
     
     GLfloat near = 1.0f;
-    GLfloat far = 30.0f;
-    GLfloat fovYradian = [self deg2rad:60.0f];
+    GLfloat far = 100.0f;
+    GLfloat fovYradian = [self deg2rad:45.0f];
     
     float view_width = view.bounds.size.width;
     float view_height = view.bounds.size.height;
@@ -126,11 +126,12 @@
                                 aspect:aspect];
     
     //テクスチャを読み込む
-    [self textureload:@"xbox-icon.png" textureUniteId:GL_TEXTURE0];
+    [self textureload:@"texture_rgb_512x512.png" textureUniteId:GL_TEXTURE0];
 
 }
 
 
+float rrr = 0;
 -(void) cameraRenderingGPU{
     
     //水色で背景塗りつぶす
@@ -143,14 +144,21 @@
     //三角形の色指定
     //glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.7f);
     
-    GLfloat calc[4][4];
+    //射影 x view
     mat4* view2 = [cam viewMat4];
     mat4* parspective = [cam perspectiveMat4];
     mat4* mat1 = [parspective multiplyMat4:view2];
-    [mat1 exportArrayGLType:calc];
+
+    //(射影 x view) x ワールド加工系
+    mat4* rotate = [mat4 rotate:[[vec3 alloc] init:1 y:1 z:0] radian:rrr];
+    rrr += 0.01;
+    mat4* mat2 = [mat1 multiplyMat4:rotate];
+
+    GLfloat calc[4][4];
+    [mat2 exportArrayGLType:calc];
     glUniformMatrix4fv(_unif_cammat4, 1, GL_FALSE, (GLfloat*)calc);
 
-
+    //頂点リスト
     verts* vlist = [[verts alloc] init];
     
     GLfloat left = -0.5;
@@ -169,27 +177,18 @@
     [vlist addVert:right y:bottom z:front u:0 v:1];
     [vlist addVert:right y:bottom z:back u:0 v:0];
 
-
-     [vlist addTriangle:0 b:1 c:2];
-     [vlist addTriangle:2 b:1 c:3];
-     [vlist addTriangle:2 b:3 c:6];
-     [vlist addTriangle:6 b:3 c:7];
-     [vlist addTriangle:6 b:7 c:4];
-     [vlist addTriangle:4 b:7 c:5];
-     [vlist addTriangle:4 b:5 c:0];
-     [vlist addTriangle:0 b:5 c:1];
-     [vlist addTriangle:1 b:5 c:3];
-     [vlist addTriangle:3 b:5 c:7];
-     [vlist addTriangle:0 b:2 c:4];
-     [vlist addTriangle:4 b:2 c:6];
-
-    
-
-    
-
-    
-    //全面
-    //[vlist addTriangle:0 b:2 c:4];
+    [vlist addTriangle:0 b:1 c:2];
+    [vlist addTriangle:2 b:1 c:3];
+    [vlist addTriangle:2 b:3 c:6];
+    [vlist addTriangle:6 b:3 c:7];
+    [vlist addTriangle:6 b:7 c:4];
+    [vlist addTriangle:4 b:7 c:5];
+    [vlist addTriangle:4 b:5 c:0];
+    [vlist addTriangle:0 b:5 c:1];
+    [vlist addTriangle:1 b:5 c:3];
+    [vlist addTriangle:3 b:5 c:7];
+    [vlist addTriangle:0 b:2 c:4];
+    [vlist addTriangle:4 b:2 c:6];
 
     //三角形の頂点を作って転送
     int count = [vlist getVertCount];
@@ -201,51 +200,17 @@
     
     glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)((GLubyte*)posTri + sizeof(vec4raw)));
 
-    count = [vlist getTriangleCount] * 3;
-    GLshort idxTri[count];
+    int vertcount = [vlist getTriangleCount] * 3;
+    GLshort idxTri[vertcount];
     [vlist indexExportToArray:idxTri];
     
-    //glCullFace(GL_FRONT);
-    
-    glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, idxTri);
+    glDrawElements(GL_TRIANGLES, vertcount, GL_UNSIGNED_SHORT, idxTri);
 
     //描画
     //glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
 }
 
-
--(void) cameraRenderCPU{
-    
-    //水色で背景塗りつぶす
-    glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    //三角形の色指定
-    glUniform4f(_unif_color, 1.0f, 0.0f, 0.0f, 0.7f);
-    
-    //三角形の頂点を作る
-    vec3* vert1 = [[vec3 alloc] init:0 y:1.0 z:-0.3];
-    vec3* vert2 = [[vec3 alloc] init:-0.5 y:0 z:-0.3];
-    vec3* vert3 = [[vec3 alloc] init:0.5 y:0 z:-0.3];
-    
-    //カメラ情報で画面に出すべき座標を計算するよ！
-    //戻り値は、wの値が入ってくるから、vec4だよ
-    vec4* vec4_vert1 = [cam cameraCalc:vert1];
-    vec4* vec4_vert2 = [cam cameraCalc:vert2];
-    vec4* vec4_vert3 = [cam cameraCalc:vert3];
-    
-    GLfloat posTri[3][4];
-    
-    [vec4_vert1 exportArray:&posTri[0][0]];
-    [vec4_vert2 exportArray:&posTri[1][0]];
-    [vec4_vert3 exportArray:&posTri[2][0]];
-    
-    //行列適応後の頂点をおくる。
-    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, 0, (GLvoid*)posTri);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
-    
-}
 
 -(GLfloat)deg2rad:(GLfloat)deg{
     return PI / 180 * deg;
@@ -290,10 +255,9 @@ float aa;
 {
     
     //カメラを回してみよう
-    aa += 0.1;
-    //[self testDrawTriangle];
-    cam->campos->x = sinf(aa)*3;
-    cam->campos->z = cosf(aa)*3;
+    //aa += 0.1;
+    //cam->campos->x = sinf(aa)*3;
+    //cam->campos->z = cosf(aa)*3;
     //NSLog(@"aa=%f x=%f z=%f¥n",aa, cam->campos->x, cam->campos->z);
     
     
