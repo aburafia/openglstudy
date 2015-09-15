@@ -12,15 +12,16 @@
 typedef struct texture {
     int width;
     int height;
-    GLuint id;
+    GLenum textureUniteId;
+    GLuint name;
 } texture;
 
 @interface textures : NSObject{
-    NSMutableArray* TextureList;
+    texture texturelist[8];
 }
 
 -(id)init;
 -(void)load:(NSString*)filename textureUniteId:(GLenum)textureUniteId;
--(void)addlist:(texture)tex;
+-(void)addlist:(int)width height:(int)height textureUniteId:(GLenum)textureUniteId name:(GLuint)name;
 
 @end

@@ -6,6 +6,7 @@
 // *  Created on: 2014/02/18
 // */
 //#import "vert.h"
+//#import "textures.h"
 //#import "support_RawData.h"
 //
 ///**
@@ -244,22 +245,23 @@
 ///**
 // * テクスチャ名とTexture構造体のマッピングを行う
 // */
-//typedef struct PmdTextureList {
-//    /**
-//     * テクスチャ名配列
-//     */
-//    GLchar **texture_names;
+////typedef struct PmdTextureList {
+////    /**
+////     * テクスチャ名配列
+////     */
+////    GLchar **texture_names;
+////
+////    /**
+////     * テクスチャの実体配列
+////     */
+////    Texture **textures;
+////
+////    /**
+////     * 管理しているテクスチャ数
+////     */
+////    int textures_num;
+////} PmdTextureList;
 //
-//    /**
-//     * テクスチャの実体配列
-//     */
-//    Texture **textures;
-//
-//    /**
-//     * 管理しているテクスチャ数
-//     */
-//    int textures_num;
-//} PmdTextureList;
 //
 //@interface pmdmanager : NSObject{
 //    GLint _attr_pos;
@@ -274,9 +276,6 @@
 //+(void)PmdFile_loadIndices:(PmdFile *)result data:(RawData *)data;
 //+(void)PmdFile_loadMaterial:(PmdFile *)result data:(RawData *)data;
 //+(void)PmdFile_loadBone:(PmdFile *)result data:(RawData *)data;
-//
-//
-//
 //
 //
 ///**
@@ -309,18 +308,18 @@
 // * 処理をラクにするため、PNGファイルの場合もhoge.png.pngのように共通化する。
 // */
 ////extern PmdTextureList* PmdFile_createTextureList(PmdFile *pmd);
-//-(PmdTextureList*) PmdFile_createTextureList:(PmdFile *)pmd;
+//-(void) PmdFile_createTextureList:(PmdFile *)pmd texs:(textures*)texs;
 //
 ///**
 // * 指定した名前のテクスチャを取得する
 // */
-//-(Texture*) PmdFile_getTexture:(PmdTextureList *)texList name:(const GLchar *)name;
+//-(texture) PmdFile_getTexture:(textures *)texList name:(const GLchar *)name;
 //
 ///**
 // * 管理しているテクスチャを解放する
 // */
 ////extern void PmdFile_freeTextureList(PmdTextureList* texList);
-//-(void)PmdFile_freeTextureList:(PmdTextureList*)texList;
+//-(void)PmdFile_freeTextureList:(textures *)texList;
 //
 //@end
 //

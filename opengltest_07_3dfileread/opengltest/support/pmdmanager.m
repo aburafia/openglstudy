@@ -309,9 +309,9 @@
 ///**
 // * PMDファイル内のテクスチャを列挙する
 // */
-//-(PmdTextureList*)PmdFile_createTextureList:(PmdFile *)pmd {
+//-(void)PmdFile_createTextureList:(PmdFile *)pmd texs:(textures*)texs{
 //    
-//    PmdTextureList *result = calloc(1, sizeof(PmdTextureList));
+//    //PmdTextureList *result = calloc(1, sizeof(PmdTextureList));
 //
 //    // 読み込み時の一時ファイル名
 //    GLchar load_name[32] = { };
@@ -365,6 +365,7 @@
 // * 指定した名前のテクスチャを取得する
 // */
 //-(Texture*)PmdFile_getTexture:(PmdTextureList *)texList name:(const GLchar *)name {
+//    
 //    if (!name[0] || !texList) {
 //        // 空文字の場合はNULLを返す
 //        return NULL;

@@ -11,13 +11,28 @@
 @implementation textures
 
 -(id)init{
-    TextureList = [NSMutableArray array];
+    
+    texturelist[0].textureUniteId = GL_TEXTURE0;
+    texturelist[1].textureUniteId = GL_TEXTURE1;
+    texturelist[2].textureUniteId = GL_TEXTURE2;
+    texturelist[3].textureUniteId = GL_TEXTURE3;
+    texturelist[4].textureUniteId = GL_TEXTURE4;
+    texturelist[5].textureUniteId = GL_TEXTURE5;
+    texturelist[6].textureUniteId = GL_TEXTURE6;
+    texturelist[7].textureUniteId = GL_TEXTURE7;
+
     return self;
 }
 
 //テクスチャを読み込みんでテクスチャユニットにBINDまで終わらせておく。
 //Bindを実行時に変えたい場合は対応してない。
 -(void)load:(NSString*)filename textureUniteId:(GLenum)textureUniteId{
+    
+    int i = (int)(textureUniteId - GL_TEXTURE0);
+    if(i < 0 || i > 7){
+        NSLog(@"テクスチャは８こまで");
+        return;
+    }
     
     //GLKTextureLoader内部でOpenGLの何かがされてるっぽい。
     //まずはactiveを切り替えないといけないみたい
@@ -33,16 +48,17 @@
     
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
     
-    [self addlist:(texture){
-        textureInfo.width,
-        textureInfo.height,
-        textureUniteId}];
+    [self addlist:textureInfo.width height:textureInfo.height textureUniteId:textureUniteId name:textureInfo.name];
     
+    return;
 }
 
--(void)addlist:(texture)tex{
-    NSValue* obj = [NSValue value:&tex withObjCType:@encode(texture)];
-    [TextureList addObject:obj];
+-(void)addlist:(int)width height:(int)height textureUniteId:(GLenum)textureUniteId name:(GLuint)name{
+    int i = (int)(textureUniteId - GL_TEXTURE0);
+    
+    texturelist[i].width = width;
+    texturelist[i].height = height;
+    texturelist[i].name = name;
 }
 
 @end
