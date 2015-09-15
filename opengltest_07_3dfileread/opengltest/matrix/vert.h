@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "vec2.h"
+#import "vec3.h"
 #import "vec4.h"
 
 @interface vert : NSObject{

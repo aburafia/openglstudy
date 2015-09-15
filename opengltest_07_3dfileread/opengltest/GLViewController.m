@@ -25,7 +25,9 @@
 
     GLint _unif_cammat4; //カメラ行列
     
+
     camera* cam;
+    textures* tex;
 }
 
 
@@ -126,8 +128,8 @@
                                 aspect:aspect];
     
     //テクスチャを読み込む
-    [self textureload:@"texture_rgb_512x512.png" textureUniteId:GL_TEXTURE0];
-
+    tex = [[textures alloc] init];
+    [tex load:@"texture_rgb_512x512.png" textureUniteId:GL_TEXTURE0];
 }
 
 
@@ -229,6 +231,7 @@ float rrr = 0;
     
 }
 
+/*
 //テクスチャを読み込みんでテクスチャユニットにBINDまで終わらせておく。
 //Bindを実行時に変えたい場合は対応してない。
 -(void)textureload:(NSString*)filename textureUniteId:(GLenum)textureUniteId{
@@ -249,6 +252,7 @@ float rrr = 0;
     glBindTexture(GL_TEXTURE_2D, textureInfo.name);
 
 }
+*/
 
 float aa;
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -265,6 +269,7 @@ float aa;
 
 }
 
+/*
 //三角形を描画。CPUでやったり、GPUでやったりしてみてる。まぁテスト
 float aaa = 0;
 -(void)testDrawTriangle{
@@ -323,6 +328,7 @@ float aaa = 0;
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
     
 }
+*/
 
 #pragma mark -  OpenGL ES 2 shader compilation
 

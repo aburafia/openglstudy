@@ -9,6 +9,7 @@
 #import <GLKit/GLKit.h>
 #import "camera.h"
 #import "verts.h"
+#import "textures.h"
 
 @interface GLViewController : GLKViewController
 

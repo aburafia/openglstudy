@@ -4,11 +4,8 @@
 // *  Created on: 2014/02/18
 // */
 //
-////#include    "support.h"
-//#include "support_RawData.h"
-//#include "support_gl_Pmd.h"
-//#include    <math.h>
-//
+////#include    <math.h>
+//#import "pmdmanager.h"
 //
 ///**
 // * PMDヘッダ
@@ -33,17 +30,19 @@
 // */
 //#define PMDFILE_BONE_NAME_LENGTH 20
 //
+//@implementation pmdmanager
+//
 ///**
 // * ヘッダファイルを読み込む
 // */
-//static bool PmdFile_loadHeader(PmdHeader *result, RawData *data) {
-//
+//+(bool)PmdFile_loadHeader:(PmdHeader *)result data:(RawData *)data{
+//    
 //    // マジックナンバーをチェックする
 //    {
 //        GLbyte magic[3] = "";
 //        RawData_readBytes(data, magic, sizeof(magic));
 //        if (memcmp("Pmd", magic, sizeof(magic))) {
-//            __logf("Magic Error %c%c%c", magic[0], magic[1], magic[2]);
+//            NSLog(@"Magic Error %c%c%c", magic[0], magic[1], magic[2]);
 //            return false;
 //        }
 //    }
@@ -51,7 +50,7 @@
 //    // version check
 //    RawData_readBytes(data, &result->version, sizeof(GLfloat));
 //    if (result->version != 1.0f) {
-//        __logf("File Version Error(%f)", result->version);
+//        NSLog(@"File Version Error(%f)", result->version);
 //        return false;
 //    }
 //
@@ -65,8 +64,8 @@
 //    ES20_sjis2utf8(result->name, sizeof(result->name));
 //    ES20_sjis2utf8(result->comment, sizeof(result->comment));
 //
-//    __logf("Name(%s)", result->name);
-//    __logf("Comment(%s)", result->comment);
+//    NSLog(@"Name(%s)", result->name);
+//    NSLog(@"Comment(%s)", result->comment);
 //
 //    return true;
 //}
@@ -74,10 +73,10 @@
 ///**
 // * 頂点情報を取得する
 // */
-//static void PmdFile_loadVertices(PmdFile *result, RawData *data) {
+//+(void)PmdFile_loadVertices:(PmdFile *)result data:(RawData *)data{
 //    // 頂点数取得
 //    const GLuint numVertices = RawData_readLE32(data);
-//    __logf("vertices[%d]", numVertices);
+//    NSLog(@"vertices[%d]", numVertices);
 //
 //    // 頂点領域を確保
 //    result->vertices = malloc(sizeof(PmdVertex) * numVertices);
@@ -89,24 +88,24 @@
 //        PmdVertex *v = &result->vertices[i];
 //
 //        // 頂点情報ロード
-//        RawData_readBytes(data, &v->position, sizeof(vec3)); // 位置
-//        RawData_readBytes(data, &v->normal, sizeof(vec3)); // 法線
-//        RawData_readBytes(data, &v->uv, sizeof(vec2)); // UV
+//        RawData_readBytes(data, &v->position, sizeof(vec3raw)); // 位置
+//        RawData_readBytes(data, &v->normal, sizeof(vec3raw)); // 法線
+//        RawData_readBytes(data, &v->uv, sizeof(vec2raw)); // UV
 //        RawData_readBytes(data, &v->extra.bone_num, sizeof(GLushort) * 2); // ボーン設定
 //        RawData_readBytes(data, &v->extra.bone_weight, sizeof(GLbyte)); // ボーン重み
 //        RawData_readBytes(data, &v->extra.edge_flag, sizeof(GLbyte)); // 輪郭フラグ
 //
-////        __logf("v[%d] p(%f, %f, %f), u(%f, %f)", i, v->position.x, v->position.y, v->position.z, v->uv.x, v->uv.y);
+//        NSLog(@"v[%d] p(%f, %f, %f), u(%f, %f)", i, v->position.x, v->position.y, v->position.z, v->uv.x, v->uv.y);
 //    }
 //}
 //
 ///**
 // * インデックス情報を取得する
 // */
-//static void PmdFile_loadIndices(PmdFile *result, RawData *data) {
+//+(void)PmdFile_loadIndices:(PmdFile *)result data:(RawData *)data{
 //    // インデックス数取得
 //    const GLuint numIndices = RawData_readLE32(data);
-//    __logf("indices[%d]", numIndices);
+//    NSLog(@"indices[%d]", numIndices);
 //
 //    // インデックス領域を確保
 //    result->indices = malloc(sizeof(GLuint) * numIndices);
@@ -128,24 +127,25 @@
 ///**
 // * 材質情報を取得する
 // */
-//static void PmdFile_loadMaterial(PmdFile *result, RawData *data) {
+//+(void)PmdFile_loadMaterial:(PmdFile *)result data:(RawData *)data{
+//
 //    const GLuint numMaterials = RawData_readLE32(data);
 //
 //    // マテリアル領域を確保
 //    result->materials = malloc(sizeof(PmdMaterial) * numMaterials);
 //    result->materials_num = numMaterials;
 //
-//    __logf("materials[%d]", numMaterials);
+//    NSLog(@"materials[%d]", numMaterials);
 //    int i = 0;
 //
 //    int sumVert = 0;
 //    for (i = 0; i < numMaterials; ++i) {
 //        PmdMaterial *m = &result->materials[i];
 //
-//        RawData_readBytes(data, &m->diffuse, sizeof(vec4));
+//        RawData_readBytes(data, &m->diffuse, sizeof(vec4raw));
 //        RawData_readBytes(data, &m->extra.shininess, sizeof(GLfloat));
-//        RawData_readBytes(data, &m->extra.specular_color, sizeof(vec3));
-//        RawData_readBytes(data, &m->extra.ambient_color, sizeof(vec3));
+//        RawData_readBytes(data, &m->extra.specular_color, sizeof(vec3raw));
+//        RawData_readBytes(data, &m->extra.ambient_color, sizeof(vec3raw));
 //        RawData_readBytes(data, &m->extra.toon_index, sizeof(GLubyte));
 //        RawData_readBytes(data, &m->extra.edge_flag, sizeof(GLubyte));
 //        RawData_readBytes(data, &m->indices_num, sizeof(GLuint));
@@ -173,22 +173,23 @@
 //
 //        }
 //
-//        __logf("material[%d] tex(%s) effect(%s) vert(%d) face(%d) toon(%d)", i, m->diffuse_texture_name, m->extra.effect_texture_name, m->indices_num, m->indices_num / 3, (int )m->extra.toon_index);
+//        NSLog(@"material[%d] tex(%s) effect(%s) vert(%d) face(%d) toon(%d)", i, m->diffuse_texture_name, m->extra.effect_texture_name, m->indices_num, m->indices_num / 3, (int )m->extra.toon_index);
 //
 //        sumVert += m->indices_num;
 //    }
 //
-//    __logf("sum vert(%d) -> num(%d)", sumVert, result->indices_num);
+//    NSLog(@"sum vert(%d) -> num(%d)", sumVert, result->indices_num);
 //    assert(sumVert == result->indices_num);
 //}
 //
-//static void PmdFile_loadBone(PmdFile *result, RawData *data) {
+//+(void)PmdFile_loadBone:(PmdFile *)result data:(RawData *)data{
+//
 //    const GLuint numBones = RawData_readLE16(data);
 //
 //    // ボーン領域を確保
 //    result->bones = malloc(sizeof(PmdBone) * numBones);
 //    result->bones_num = numBones;
-//    __logf("bones[%d]", numBones);
+//    NSLog(@"bones[%d]", numBones);
 //
 //    // ボーンを読み込む
 //    int i;
@@ -203,26 +204,35 @@
 //        RawData_readBytes(data, &bone->extra.tail_pos_bone_index, sizeof(GLshort));
 //        RawData_readBytes(data, &bone->extra.type, sizeof(GLbyte));
 //        RawData_readBytes(data, &bone->extra.ik_parent_bone_index, sizeof(GLshort));
-//        RawData_readBytes(data, &bone->position, sizeof(vec3));
+//        RawData_readBytes(data, &bone->position, sizeof(vec3raw));
 //
-////        __logf("bone[%d] name(%s)", i, bone->name);
+//        NSLog(@"bone[%d] name(%s)", i, bone->name);
 //    }
 //}
 //
 ///**
 // * PMDファイルを生成する
 // */
-//PmdFile* PmdFile_create(RawData *data) {
+//-(PmdFile*)PmdFile_create:(RawData *)data {
+//    
 //    PmdFile *result = calloc(1, sizeof(PmdFile));
 //
 //    // ファイルヘッダを読み込む
-//    if (!PmdFile_loadHeader(&result->header, data)) {
+//    bool b = [pmdmanager PmdFile_loadHeader:&result->header data:data];
+//    
+//    if (!b) {
 //        // 読み込み失敗
 //        PmdFile_free(result);
 //        return NULL;
 //    }
 //
 //    // 頂点データを読み込み
+//    [pmdmanager PmdFile_loadVertices:result data:data];
+//    [pmdmanager PmdFile_loadIndices:result data:data];
+//    [pmdmanager PmdFile_loadMaterial:result data:data];
+//    [pmdmanager PmdFile_loadBone:result data:data];
+//    
+//    /*
 //    PmdFile_loadVertices(result, data);
 //    // インデックスデータを読み込み
 //    PmdFile_loadIndices(result, data);
@@ -230,22 +240,25 @@
 //    PmdFile_loadMaterial(result, data);
 //    // ボーン情報を読み込み
 //    PmdFile_loadBone(result, data);
-//
+//     */
+//    
 //    return result;
 //}
 //
 ///**
 // * PMDファイルをロードする
 // */
-//PmdFile* PmdFile_load(GLApplication *app, const char* file_name) {
-//    RawData *data = RawData_loadFile(app, file_name);
+//-(PmdFile*) PmdFile_load:(const NSString*) file_name {
+//    
+//    
+//    RawData *data = RawData_loadFile([file_name UTF8String]);
 //    if (!data) {
 //        return NULL;
 //    }
 //
-//    PmdFile* result = PmdFile_create(data);
+//    PmdFile* result = [self PmdFile_create:data];
 //
-//    RawData_freeFile(app, data);
+//    RawData_freeFile(data);
 //
 //    return result;
 //}
@@ -253,7 +266,8 @@
 ///**
 // * PMDファイルを解放する
 // */
-//void PmdFile_free(PmdFile *pmd) {
+//-(void)PmdFile_free:(PmdFile *)pmd {
+//
 //    if (!pmd) {
 //        return;
 //    }
@@ -268,14 +282,15 @@
 ///**
 // * 最小最大地点を求める
 // */
-//void PmdFile_calcAABB(PmdFile *pmd, vec3 *minPoint, vec3 *maxPoint) {
-//    *minPoint = vec3_create(10000, 10000, 10000);
-//    *maxPoint = vec3_create(-10000, -10000, -10000);
+//-(void)PmdFile_calcAABB:(PmdFile *)pmd minPoint:(vec3raw*)minPoint maxPoint:(vec3raw*)maxPoint {
+//    
+//    *minPoint = (vec3raw){10000, 10000, 10000};
+//    *maxPoint = (vec3raw){-10000, -10000, -10000};
 //
 //    if (!pmd) {
 //        // PMDが無いため、適当な位置を指定する
-//        *minPoint = vec3_create(-10, -10, -10);
-//        *maxPoint = vec3_create(10, 10, 10);
+//        *minPoint = (vec3raw){-10, -10, -10};
+//        *maxPoint = (vec3raw){10, 10, 10};
 //        return;
 //    }
 //
@@ -294,7 +309,8 @@
 ///**
 // * PMDファイル内のテクスチャを列挙する
 // */
-//PmdTextureList* PmdFile_createTextureList(GLApplication *app, PmdFile *pmd) {
+//-(PmdTextureList*)PmdFile_createTextureList:(PmdFile *)pmd {
+//    
 //    PmdTextureList *result = calloc(1, sizeof(PmdTextureList));
 //
 //    // 読み込み時の一時ファイル名
@@ -336,7 +352,7 @@
 //                    // ファイル名をコピーする
 //                    strcpy(result->texture_names[index], material->diffuse_texture_name);
 //                }else {
-//                    __logf("Texture load fail(%s)", material->diffuse_texture_name);
+//                    NSLog(@"Texture load fail(%s)", material->diffuse_texture_name);
 //                }
 //            }
 //        }
@@ -348,7 +364,7 @@
 ///**
 // * 指定した名前のテクスチャを取得する
 // */
-//Texture* PmdFile_getTexture(PmdTextureList *texList, const GLchar *name) {
+//-(Texture*)PmdFile_getTexture:(PmdTextureList *)texList name:(const GLchar *)name {
 //    if (!name[0] || !texList) {
 //        // 空文字の場合はNULLを返す
 //        return NULL;
@@ -368,7 +384,7 @@
 ///**
 // * 管理しているテクスチャを解放する
 // */
-//void PmdFile_freeTextureList(PmdTextureList* texList) {
+//-(void)PmdFile_freeTextureList:(PmdTextureList*) texList {
 //    if (!texList) {
 //        return;
 //    }
@@ -388,3 +404,4 @@
 //    free(texList);
 //}
 //
+//@end

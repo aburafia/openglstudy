@@ -5,9 +5,8 @@
 // * 各構造体の文字列部分についてはsjis->utf8変換を見込んで大きめに確保してある
 // *  Created on: 2014/02/18
 // */
-//#ifndef SUPPORT_GL_PMD_H_
-//#define SUPPORT_GL_PMD_H_
-//
+//#import "vert.h"
+//#import "support_RawData.h"
 //
 ///**
 // * PMDファイルのヘッダ情報
@@ -36,17 +35,17 @@
 //    /**
 //     * 位置
 //     */
-//    vec3 position;
+//    vec3raw position;
 //
 //    /**
 //     * テクスチャUV
 //     */
-//    vec2 uv;
+//    vec2raw uv;
 //
 //    /**
 //     * 法線
 //     */
-//    vec3 normal;
+//    vec3raw normal;
 //
 //    /**
 //     * サンプルでは使用しないが、PMDファイル仕様的に含まれている情報
@@ -80,7 +79,7 @@
 //    /**
 //     * 拡散反射光
 //     */
-//    vec4 diffuse;
+//    vec4raw diffuse;
 //
 //    /**
 //     * 頂点数
@@ -110,12 +109,12 @@
 //        /**
 //         * スペキュラ色
 //         */
-//        vec3 specular_color;
+//        vec3raw specular_color;
 //
 //        /**
 //         * 環境光
 //         */
-//        vec3 ambient_color;
+//        vec3raw ambient_color;
 //        /**
 //         *
 //         */
@@ -148,7 +147,7 @@
 //    /**
 //     * ボーンの位置
 //     */
-//    vec3 position;
+//    vec3raw position;
 //
 //    /**
 //     * サンプルでは使用しないが、PMDファイル仕様的に含まれている情報
@@ -223,6 +222,26 @@
 //} PmdFile;
 //
 ///**
+// * テクスチャ用構造体
+// */
+//typedef struct Texture {
+//    /**
+//     * 画像幅
+//     */
+//    int width;
+//    
+//    /**
+//     * 画像高さ
+//     */
+//    int height;
+//    
+//    /**
+//     * GL側のテクスチャID
+//     */
+//    GLuint id;
+//} Texture;
+//
+///**
 // * テクスチャ名とTexture構造体のマッピングを行う
 // */
 //typedef struct PmdTextureList {
@@ -242,25 +261,44 @@
 //    int textures_num;
 //} PmdTextureList;
 //
+//@interface pmdmanager : NSObject{
+//    GLint _attr_pos;
+//    GLint _attr_uv;
+//    NSMutableArray* vert_array;
+//    NSMutableArray* triangle_array;
+//}
+//
+//
+//+(bool)PmdFile_loadHeader:(PmdHeader *)result data:(RawData *)data;
+//+(void)PmdFile_loadVertices:(PmdFile *)result data:(RawData *)data;
+//+(void)PmdFile_loadIndices:(PmdFile *)result data:(RawData *)data;
+//+(void)PmdFile_loadMaterial:(PmdFile *)result data:(RawData *)data;
+//+(void)PmdFile_loadBone:(PmdFile *)result data:(RawData *)data;
+//
+//
+//
+//
+//
 ///**
 // * PMDファイルを生成する
 // */
-//extern PmdFile* PmdFile_create(RawData *data);
+//-(PmdFile)PmdFile_create:(RawData*)data;
 //
 ///**
 // * PMDファイルをロードする
 // */
-//extern PmdFile* PmdFile_load(const char* file_name);
+//-(PmdFile)PmdFile_load:(const NSString*)file_name;
 //
 ///**
 // * PMDファイルを解放する
 // */
-//extern void PmdFile_free(PmdFile *pmd);
+////extern void PmdFile_free(PmdFile *pmd);
+//-(void)PmdFile_free:(PmdFile *)pmd;
 //
 ///**
 // * 最小最大地点を求める
 // */
-//extern void PmdFile_calcAABB(PmdFile *pmd, vec3 *minPoint, vec3 *maxPoint);
+//-(void)PmdFile_calcAABB:(PmdFile *)pmd minPoint:(vec3raw*)minPoint maxPoint:(vec3raw*)maxPoint;
 //
 ///**
 // * PMDファイル内のテクスチャを列挙する
@@ -270,17 +308,19 @@
 // * そのため、pngに変換したファイルをhoge.bmp.pngのような形で".png"を付けて配置する。
 // * 処理をラクにするため、PNGファイルの場合もhoge.png.pngのように共通化する。
 // */
-//extern PmdTextureList* PmdFile_createTextureList(PmdFile *pmd);
+////extern PmdTextureList* PmdFile_createTextureList(PmdFile *pmd);
+//-(PmdTextureList*) PmdFile_createTextureList:(PmdFile *)pmd;
 //
 ///**
 // * 指定した名前のテクスチャを取得する
 // */
-//extern Texture* PmdFile_getTexture(PmdTextureList *texList, const GLchar *name);
+//-(Texture*) PmdFile_getTexture:(PmdTextureList *)texList name:(const GLchar *)name;
 //
 ///**
 // * 管理しているテクスチャを解放する
 // */
-//extern void PmdFile_freeTextureList(PmdTextureList* texList);
+////extern void PmdFile_freeTextureList(PmdTextureList* texList);
+//-(void)PmdFile_freeTextureList:(PmdTextureList*)texList;
 //
-//#endif /* SUPPORT_GL_PMD_H_ */
+//@end
 //
