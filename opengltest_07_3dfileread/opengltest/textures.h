@@ -14,14 +14,18 @@ typedef struct texture {
     int height;
     GLenum textureUniteId;
     GLuint name;
+    GLchar* filename;
 } texture;
 
 @interface textures : NSObject{
+    @public
     texture texturelist[8];
+    int texture_count;
 }
 
 -(id)init;
 -(void)load:(NSString*)filename textureUniteId:(GLenum)textureUniteId;
--(void)addlist:(int)width height:(int)height textureUniteId:(GLenum)textureUniteId name:(GLuint)name;
+-(void)addlist:(int)width height:(int)height textureUniteId:(GLenum)textureUniteId name:(GLuint)name filename:(GLchar*)filename;
+-(void)free;
 
 @end
