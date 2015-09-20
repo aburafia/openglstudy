@@ -1,86 +1,85 @@
-///*
-// * support_gl_Pmd.c
-// *
-// *  Created on: 2014/02/18
-// */
-//
-////#include    <math.h>
-//#import "pmdmanager.h"
-//
-///**
-// * PMDヘッダ
-// * モデル名
-// */
-//#define PMDFILE_HEADER_MODELNAME_LENGTH 20
-//
-///**
-// * PMDヘッダ
-// * コメント
-// */
-//#define PMDFILE_HEADER_COMMENT_LENGTH 256
-//
-///**
-// * マテリアル
-// * テクスチャ名
-// */
-//#define PMDFILE_MATERIAL_TEXTURENAME_LENGTH 20
-//
-///**
-// * ボーン名
-// */
-//#define PMDFILE_BONE_NAME_LENGTH 20
-//
-//@implementation pmdmanager
-//
-///**
-// * ヘッダファイルを読み込む
-// */
-//+(bool)PmdFile_loadHeader:(PmdHeader *)result data:(RawData *)data{
-//    
-//    // マジックナンバーをチェックする
-//    {
-//        GLbyte magic[3] = "";
-//        RawData_readBytes(data, magic, sizeof(magic));
-//        if (memcmp("Pmd", magic, sizeof(magic))) {
-//            NSLog(@"Magic Error %c%c%c", magic[0], magic[1], magic[2]);
-//            return false;
-//        }
-//    }
-//
-//    // version check
-//    RawData_readBytes(data, &result->version, sizeof(GLfloat));
-//    if (result->version != 1.0f) {
-//        NSLog(@"File Version Error(%f)", result->version);
-//        return false;
-//    }
-//
-//    // モデル名
-//    RawData_readBytes(data, result->name, PMDFILE_HEADER_MODELNAME_LENGTH);
-//
-//    // コメント
-//    RawData_readBytes(data, result->comment, PMDFILE_HEADER_COMMENT_LENGTH);
-//
-//    
-//    // SJISで文字列が格納されているため、UTF-8に変換をかける
-//    [pmdmanager sjis2utf8:result->name];
-//    [pmdmanager sjis2utf8:result->comment];
-//
-//    NSLog(@"Name(%s)", result->name);
-//    NSLog(@"Comment(%s)", result->comment);
-//
-//    return true;
-//}
-//
-//+(void)sjis2utf8:(GLchar*)str{
-//    
-//    // 一旦NULLターミネート文字列をNSDataに落とす
-//    NSData *sjisData = [NSData dataWithBytes:str length:strlen(str)];
-//    
-//    // 対象のNSDataがsjisコードであることを指定してNSStringを作成
-//    NSString* string = [[NSString alloc] initWithData:sjisData encoding:NSShiftJISStringEncoding];
-//
-//    str = (GLchar*)[string UTF8String];
-//}
+/*
+ * support_gl_Pmd.c
+ *
+ *  Created on: 2014/02/18
+ */
+
+//#include    <math.h>
+#import "pmdmanager.h"
+
+/**
+ * PMDヘッダ
+ * モデル名
+ */
+#define PMDFILE_HEADER_MODELNAME_LENGTH 20
+
+/**
+ * PMDヘッダ
+ * コメント
+ */
+#define PMDFILE_HEADER_COMMENT_LENGTH 256
+
+/**
+ * マテリアル
+ * テクスチャ名
+ */
+#define PMDFILE_MATERIAL_TEXTURENAME_LENGTH 20
+
+/**
+ * ボーン名
+ */
+#define PMDFILE_BONE_NAME_LENGTH 20
+
+@implementation pmdmanager
+
+/**
+ * ヘッダファイルを読み込む
+ */
+-(bool)loadHeader:(RawData *)data{
+    
+    // マジックナンバーをチェックする
+    {
+        GLbyte magic[3] = "";
+        RawData_readBytes(data, magic, sizeof(magic));
+        if (memcmp("Pmd", magic, sizeof(magic))) {
+            NSLog(@"Magic Error %c%c%c", magic[0], magic[1], magic[2]);
+            return false;
+        }
+    }
+
+    // version check
+    RawData_readBytes(data, &_pmdheader.version, sizeof(GLfloat));
+    if (_pmdheader.version != 1.0f) {
+        NSLog(@"File Version Error(%f)", _pmdheader.version);
+        return false;
+    }
+
+    // モデル名
+    RawData_readBytes(data, _pmdheader.name, PMDFILE_HEADER_MODELNAME_LENGTH);
+
+    // コメント
+    RawData_readBytes(data, _pmdheader.comment, PMDFILE_HEADER_COMMENT_LENGTH);
+    
+    // SJISで文字列が格納されているため、UTF-8に変換をかける
+    [pmdmanager sjis2utf8:_pmdheader.name];
+    [pmdmanager sjis2utf8:_pmdheader.comment];
+
+    NSLog(@"Name(%s)", _pmdheader.name);
+    NSLog(@"Comment(%s)", _pmdheader.comment);
+
+    return true;
+}
+
++(void)sjis2utf8:(GLchar*)str{
+    
+    // 一旦NULLターミネート文字列をNSDataに落とす
+    NSData *sjisData = [NSData dataWithBytes:str length:strlen(str)];
+    
+    // 対象のNSDataがsjisコードであることを指定してNSStringを作成
+    NSString* string = [[NSString alloc] initWithData:sjisData encoding:NSShiftJISStringEncoding];
+
+    str = (GLchar*)[string UTF8String];
+}
 //
 ///**
 // * 頂点情報を取得する
@@ -227,76 +226,87 @@
 //        NSLog(@"bone[%d] name(%s)", i, bone->name);
 //    }
 //}
-//
-///**
-// * PMDファイルを生成する
-// */
-//-(PmdFile*)PmdFile_create:(RawData *)data {
-//    
-//    PmdFile* result = calloc(1, sizeof(PmdFile));
-//
-//    // ファイルヘッダを読み込む
-//    bool b = [pmdmanager PmdFile_loadHeader:&result->header data:data];
-//    
-//    if (!b) {
-//        // 読み込み失敗
-//        [self PmdFile_free:result];
-//        return NULL;
-//    }
-//
+
+/**
+ * PMDファイルを生成する
+ */
+-(void)create:(RawData *)data {
+    
+    //_result = calloc(1, sizeof(PmdFile));
+
+    // ファイルヘッダを読み込む
+    bool b = [self loadHeader:data];
+    
+    if (!b) {
+        // 読み込み失敗
+//        [self free];
+        return;
+    }
+
 //    // 頂点データを読み込み
-//    [pmdmanager PmdFile_loadVertices:result data:data];
-//    [pmdmanager PmdFile_loadIndices:result data:data];
-//    [pmdmanager PmdFile_loadMaterial:result data:data];
-//    [pmdmanager PmdFile_loadBone:result data:data];
-//    
-//    /*
-//    PmdFile_loadVertices(result, data);
-//    // インデックスデータを読み込み
-//    PmdFile_loadIndices(result, data);
-//    // 材質情報を読み込み
-//    PmdFile_loadMaterial(result, data);
-//    // ボーン情報を読み込み
-//    PmdFile_loadBone(result, data);
-//     */
-//    
-//    return result;
-//}
-//
-///**
-// * PMDファイルをロードする
-// */
-//-(PmdFile*) PmdFile_load:(const NSString*) file_name {
-//    
-//    
-//    RawData *data = RawData_loadFile([file_name UTF8String]);
-//    if (!data) {
-//        return nil;
-//    }
-//
-//    PmdFile *result = [self PmdFile_create:data];
-//
-//    RawData_freeFile(data);
-//
-//    return result;
-//}
-//
-///**
-// * PMDファイルを解放する
-// */
-//-(void)PmdFile_free:(PmdFile *)pmd {
-//
-//    if (!pmd) {
-//        return;
-//    }
-//
-//    free(pmd->vertices);
-//    free(pmd->indices);
-//    free(pmd->materials);
-//    free(pmd->bones);
-//    free(pmd);
-//}
-//
+//    [self loadVertices:data];
+//    [self loadIndices:data];
+//    [self loadMaterial:data];
+//    [self loadBone:data];
+    
+}
+
+/**
+ * assets配下からファイルを読み込む
+ */
+-(RawData*)RawData_loadFile:(NSString*)file_name {
+    
+    NSURL* filepath = [[NSBundle mainBundle] URLForResource:file_name withExtension:@""];
+    NSData* data = [[NSData alloc] initWithContentsOfFile:[filepath path]];
+
+    if(!data) {
+        NSLog(@"file not found(%@)", file_name);
+        return NULL;
+    }
+    
+    RawData *raw = (RawData*)malloc(sizeof(RawData));
+    raw->length = (int)data.length;
+    raw->head = malloc(raw->length);
+    raw->read_head = (uint8_t*)raw->head;
+    
+    memcpy(raw->head, data.bytes, raw->length);
+    return raw;
+}
+
+/**
+ * PMDファイルをロードする
+ */
+-(void)load:(NSString*) file_name {
+    
+    
+    RawData *data = [self RawData_loadFile:file_name];
+    if (!data) {
+        return;
+    }
+
+    [self create:data];
+
+    //RawData_freeFile(data);
+
+    return;
+}
+
+/**
+ * PMDファイルを解放する
+ */
+-(void)PmdFile_free:(PmdFile *)pmd {
+
+    if (!pmd) {
+        return;
+    }
+
+    free(pmd->vertices);
+    free(pmd->indices);
+    free(pmd->materials);
+    free(pmd->bones);
+    free(pmd);
+}
+
 ///**
 // * 最小最大地点を求める
 // */
@@ -323,7 +333,7 @@
 //        maxPoint->z = (GLfloat) fmax(maxPoint->z, pmd->vertices[i].position.z);
 //    }
 //}
-//
+
 ///**
 // * PMDファイル内のテクスチャを列挙する
 // */
@@ -423,5 +433,5 @@
 //    }
 //    free(texList);
 //}
-//
-//@end
+
+@end

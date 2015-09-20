@@ -37,12 +37,12 @@ typedef struct RawData {
 /**
  * assets配下からファイルを読み込む
  */
-extern RawData* RawData_loadFile(const char* file_name);
+//extern RawData* RawData_loadFile(const char* file_name);
 
 /**
  * 読み込んだファイルを解放する
  */
-extern void RawData_freeFile(RawData *rawData);
+//extern void RawData_freeFile(RawData *rawData);
 
 /**
  * データ全体の長さを取得する
