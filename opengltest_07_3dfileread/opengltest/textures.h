@@ -8,24 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-
-typedef struct texture {
-    int width;
-    int height;
-    GLenum textureUniteId;
-    GLuint name;
-    GLchar* filename;
-} texture;
+#import "texture.h"
 
 @interface textures : NSObject{
     @public
-    texture texturelist[8];
+    texture* texturelist[8];
     int texture_count;
 }
 
--(id)init;
--(void)load:(NSString*)filename textureUniteId:(GLenum)textureUniteId;
--(void)addlist:(int)width height:(int)height textureUniteId:(GLenum)textureUniteId name:(GLuint)name filename:(GLchar*)filename;
+-(void)add:(GLenum)textureUniteId filename:(NSString*)filename;
 -(void)free;
 
 @end

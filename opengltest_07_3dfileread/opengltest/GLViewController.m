@@ -129,7 +129,7 @@
     
     //テクスチャを読み込む
     tex = [[textures alloc] init];
-    [tex load:@"texture_rgb_512x512.png" textureUniteId:GL_TEXTURE0];
+    [tex add:GL_TEXTURE0 filename:@"texture_rgb_512x512.png"];
 }
 
 
