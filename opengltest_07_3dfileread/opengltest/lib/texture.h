@@ -13,14 +13,13 @@
     @public
     int _width;
     int _height;
-    GLenum _textureUniteId;
     GLuint _name;
     NSString* _filename;
 }
 
 -(void)load;
--(id)init:(GLenum)textureUniteId filename:(NSString*)filename;
+-(id)init:(NSString*)filename;
 -(void)free;
-
+-(void)bind;
 
 @end

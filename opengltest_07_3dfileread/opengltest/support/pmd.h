@@ -110,60 +110,23 @@ typedef struct PmdFile {
     GLuint bones_num; //ボーン数
 } PmdFile;
 
-/**
- * テクスチャ用構造体
-
-typedef struct Texture {
-    int width;
-    int height;
-    GLuint id; //GL側のテクスチャID
-} Texture;
- */
-
-/**
- * テクスチャ名とTexture構造体のマッピングを行う
- */
-//typedef struct PmdTextureList {
-//    /**
-//     * テクスチャ名配列
-//     */
-//    GLchar **texture_names;
-//
-//    /**
-//     * テクスチャの実体配列
-//     */
-//    Texture **textures;
-//
-//    /**
-//     * 管理しているテクスチャ数
-//     */
-//    int textures_num;
-//} PmdTextureList;
-
-
-@interface pmdmanager : NSObject{
+@interface pmd : NSObject{
     GLint _attr_pos;
     GLint _attr_uv;
     NSMutableArray* vert_array;
     NSMutableArray* triangle_array;
     
+    RawData* data;
     PmdHeader _pmdheader;
     PmdFile _result;
 }
 
-
--(bool)loadHeader:(RawData *)data;
-//-(void)loadVertices:(RawData *)data;
-//-(void)loadIndices:(RawData *)data;
-//-(void)loadMaterial:(RawData *)data;
-//-(void)loadBone:(RawData *)data;
-
-+(void)sjis2utf8:(GLchar*)str;
-
-/**
- * PMDファイルを生成する
- */
--(void)create:(RawData*)data;
+-(bool)loadHeader;
+-(void)loadVertices;
+-(void)loadIndices;
+-(void)loadMaterial;
+-(void)loadBone;
+-(void)loadTextures:(textures*)texlist;
 
 /**
  * PMDファイルをロードする
@@ -173,35 +136,12 @@ typedef struct Texture {
 /**
  * PMDファイルを解放する
  */
-//extern void PmdFile_free(PmdFile *pmd);
-//-(void)free;
+-(void)PmdFile_free:(PmdFile *)pmd;
 
-///**
-// * 最小最大地点を求める
-// */
-//-(void)PmdFile_calcAABB:(PmdFile *)pmd minPoint:(vec3raw*)minPoint maxPoint:(vec3raw*)maxPoint;
-//
-///**
-// * PMDファイル内のテクスチャを列挙する
-// *
-// * 注意）
-// * PMDの性質上、テクスチャファイルはtgaやbmp等の巨大ファイルになる恐れがある。
-// * そのため、pngに変換したファイルをhoge.bmp.pngのような形で".png"を付けて配置する。
-// * 処理をラクにするため、PNGファイルの場合もhoge.png.pngのように共通化する。
-// */
-////extern PmdTextureList* PmdFile_createTextureList(PmdFile *pmd);
-//-(void) PmdFile_createTextureList:(PmdFile *)pmd texs:(textures*)texs;
-//
-///**
-// * 指定した名前のテクスチャを取得する
-// */
-//-(texture* )PmdFile_getTexture:(textures *)texList name:(const GLchar *)name;
-//
-///**
-// * 管理しているテクスチャを解放する
-// */
-////extern void PmdFile_freeTextureList(PmdTextureList* texList);
-//-(void)PmdFile_freeTextureList:(textures *)texList;
+/**
+ * 最小最大地点を求める
+ */
+-(void)calcAABB:(vec3raw*)minPoint maxPoint:(vec3raw*)maxPoint;
 
 @end
 

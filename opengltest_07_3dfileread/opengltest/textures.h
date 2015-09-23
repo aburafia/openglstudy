@@ -12,11 +12,13 @@
 
 @interface textures : NSObject{
     @public
-    texture* texturelist[8];
+    NSMutableDictionary* texturelist;
     int texture_count;
 }
 
--(void)add:(GLenum)textureUniteId filename:(NSString*)filename;
+-(void)add:(NSString*)filename;
+-(texture*)get:(NSString*)filename;
+-(void)bind:(NSString*)filename;
 -(void)free;
 
 @end

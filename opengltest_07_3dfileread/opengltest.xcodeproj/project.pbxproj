@@ -10,16 +10,17 @@
 		42293B041B6FCC8A00768E0C /* vert.m in Sources */ = {isa = PBXBuildFile; fileRef = 42293B031B6FCC8A00768E0C /* vert.m */; };
 		42293B081B6FCD1A00768E0C /* vec2.m in Sources */ = {isa = PBXBuildFile; fileRef = 42293B071B6FCD1A00768E0C /* vec2.m */; };
 		422B1F881B973A7300DBB813 /* verts.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B1F871B973A7300DBB813 /* verts.m */; };
-		42715B241B9FF6F800052B4D /* pmd-body.png.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B1E1B9FF6F800052B4D /* pmd-body.png.png */; };
-		42715B251B9FF6F800052B4D /* pmd-face.png.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B1F1B9FF6F800052B4D /* pmd-face.png.png */; };
+		42715B241B9FF6F800052B4D /* pmd-body.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B1E1B9FF6F800052B4D /* pmd-body.png */; };
+		42715B251B9FF6F800052B4D /* pmd-face.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B1F1B9FF6F800052B4D /* pmd-face.png */; };
 		42715B261B9FF6F800052B4D /* pmd-sample.pmd in Resources */ = {isa = PBXBuildFile; fileRef = 42715B201B9FF6F800052B4D /* pmd-sample.pmd */; };
 		42715B271B9FF6F800052B4D /* simple-atlas.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B211B9FF6F800052B4D /* simple-atlas.png */; };
 		42715B281B9FF6F800052B4D /* texture_rgb_300x400.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B221B9FF6F800052B4D /* texture_rgb_300x400.png */; };
 		42715B291B9FF6F800052B4D /* texture_rgb_512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = 42715B231B9FF6F800052B4D /* texture_rgb_512x512.png */; };
-		42715B2F1BA04C7500052B4D /* pmdmanager.m in Sources */ = {isa = PBXBuildFile; fileRef = 42715B2B1BA04C7500052B4D /* pmdmanager.m */; };
+		42715B2F1BA04C7500052B4D /* pmd.m in Sources */ = {isa = PBXBuildFile; fileRef = 42715B2B1BA04C7500052B4D /* pmd.m */; };
 		42715B301BA04C7500052B4D /* support_RawData.c in Sources */ = {isa = PBXBuildFile; fileRef = 42715B2D1BA04C7500052B4D /* support_RawData.c */; };
 		428CDD7B1BA3EFAC00C835C6 /* textures.m in Sources */ = {isa = PBXBuildFile; fileRef = 428CDD7A1BA3EFAC00C835C6 /* textures.m */; };
 		428CDD7E1BAE991000C835C6 /* texture.m in Sources */ = {isa = PBXBuildFile; fileRef = 428CDD7D1BAE991000C835C6 /* texture.m */; };
+		428CDD821BB04C7600C835C6 /* util_str.m in Sources */ = {isa = PBXBuildFile; fileRef = 428CDD811BB04C7600C835C6 /* util_str.m */; };
 		42C6CB731AE7ADE800F0570B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6CB721AE7ADE800F0570B /* main.m */; };
 		42C6CB761AE7ADE800F0570B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C6CB751AE7ADE800F0570B /* AppDelegate.m */; };
 		42C6CB781AE7ADE800F0570B /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 42C6CB771AE7ADE800F0570B /* Shader.fsh */; };
@@ -56,20 +57,22 @@
 		42293B071B6FCD1A00768E0C /* vec2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = vec2.m; sourceTree = "<group>"; };
 		422B1F861B973A7300DBB813 /* verts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = verts.h; path = lib/verts.h; sourceTree = "<group>"; };
 		422B1F871B973A7300DBB813 /* verts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = verts.m; path = lib/verts.m; sourceTree = "<group>"; };
-		42715B1E1B9FF6F800052B4D /* pmd-body.png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pmd-body.png.png"; sourceTree = "<group>"; };
-		42715B1F1B9FF6F800052B4D /* pmd-face.png.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pmd-face.png.png"; sourceTree = "<group>"; };
+		42715B1E1B9FF6F800052B4D /* pmd-body.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pmd-body.png"; sourceTree = "<group>"; };
+		42715B1F1B9FF6F800052B4D /* pmd-face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pmd-face.png"; sourceTree = "<group>"; };
 		42715B201B9FF6F800052B4D /* pmd-sample.pmd */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pmd-sample.pmd"; sourceTree = "<group>"; };
 		42715B211B9FF6F800052B4D /* simple-atlas.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "simple-atlas.png"; sourceTree = "<group>"; };
 		42715B221B9FF6F800052B4D /* texture_rgb_300x400.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_rgb_300x400.png; sourceTree = "<group>"; };
 		42715B231B9FF6F800052B4D /* texture_rgb_512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = texture_rgb_512x512.png; sourceTree = "<group>"; };
-		42715B2B1BA04C7500052B4D /* pmdmanager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = pmdmanager.m; sourceTree = "<group>"; };
-		42715B2C1BA04C7500052B4D /* pmdmanager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pmdmanager.h; sourceTree = "<group>"; };
-		42715B2D1BA04C7500052B4D /* support_RawData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = support_RawData.c; sourceTree = "<group>"; };
-		42715B2E1BA04C7500052B4D /* support_RawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = support_RawData.h; sourceTree = "<group>"; };
+		42715B2B1BA04C7500052B4D /* pmd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = pmd.m; path = support/pmd.m; sourceTree = "<group>"; };
+		42715B2C1BA04C7500052B4D /* pmd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pmd.h; path = support/pmd.h; sourceTree = "<group>"; };
+		42715B2D1BA04C7500052B4D /* support_RawData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = support_RawData.c; path = support/support_RawData.c; sourceTree = "<group>"; };
+		42715B2E1BA04C7500052B4D /* support_RawData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = support_RawData.h; path = support/support_RawData.h; sourceTree = "<group>"; };
 		428CDD791BA3EFAC00C835C6 /* textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = textures.h; sourceTree = "<group>"; };
 		428CDD7A1BA3EFAC00C835C6 /* textures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = textures.m; sourceTree = "<group>"; };
 		428CDD7C1BAE991000C835C6 /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texture.h; path = lib/texture.h; sourceTree = "<group>"; };
 		428CDD7D1BAE991000C835C6 /* texture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = texture.m; path = lib/texture.m; sourceTree = "<group>"; };
+		428CDD801BB04C7600C835C6 /* util_str.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util_str.h; path = support/util_str.h; sourceTree = "<group>"; };
+		428CDD811BB04C7600C835C6 /* util_str.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = util_str.m; path = support/util_str.m; sourceTree = "<group>"; };
 		42C6CB6D1AE7ADE800F0570B /* opengltest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = opengltest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C6CB711AE7ADE800F0570B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42C6CB721AE7ADE800F0570B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -120,6 +123,12 @@
 		422B1F851B973A2B00DBB813 /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				42715B2B1BA04C7500052B4D /* pmd.m */,
+				42715B2C1BA04C7500052B4D /* pmd.h */,
+				42715B2D1BA04C7500052B4D /* support_RawData.c */,
+				42715B2E1BA04C7500052B4D /* support_RawData.h */,
+				428CDD801BB04C7600C835C6 /* util_str.h */,
+				428CDD811BB04C7600C835C6 /* util_str.m */,
 				422B1F861B973A7300DBB813 /* verts.h */,
 				422B1F871B973A7300DBB813 /* verts.m */,
 				428CDD791BA3EFAC00C835C6 /* textures.h */,
@@ -133,8 +142,8 @@
 		42715B1D1B9FF6F800052B4D /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				42715B1E1B9FF6F800052B4D /* pmd-body.png.png */,
-				42715B1F1B9FF6F800052B4D /* pmd-face.png.png */,
+				42715B1E1B9FF6F800052B4D /* pmd-body.png */,
+				42715B1F1B9FF6F800052B4D /* pmd-face.png */,
 				42715B201B9FF6F800052B4D /* pmd-sample.pmd */,
 				42715B211B9FF6F800052B4D /* simple-atlas.png */,
 				42715B221B9FF6F800052B4D /* texture_rgb_300x400.png */,
@@ -144,22 +153,9 @@
 			path = opengltest/assets;
 			sourceTree = "<group>";
 		};
-		42715B2A1BA04C1600052B4D /* support */ = {
-			isa = PBXGroup;
-			children = (
-				42715B2B1BA04C7500052B4D /* pmdmanager.m */,
-				42715B2C1BA04C7500052B4D /* pmdmanager.h */,
-				42715B2D1BA04C7500052B4D /* support_RawData.c */,
-				42715B2E1BA04C7500052B4D /* support_RawData.h */,
-			);
-			name = support;
-			path = opengltest/support;
-			sourceTree = "<group>";
-		};
 		42C6CB641AE7ADE800F0570B = {
 			isa = PBXGroup;
 			children = (
-				42715B2A1BA04C1600052B4D /* support */,
 				42715B1D1B9FF6F800052B4D /* assets */,
 				42C6CB6F1AE7ADE800F0570B /* opengltest */,
 				42C6CB8D1AE7ADE800F0570B /* opengltestTests */,
@@ -329,13 +325,13 @@
 				42C6CB801AE7ADE800F0570B /* Main.storyboard in Resources */,
 				42C6CB821AE7ADE800F0570B /* Images.xcassets in Resources */,
 				42C6CB7A1AE7ADE800F0570B /* Shader.vsh in Resources */,
-				42715B251B9FF6F800052B4D /* pmd-face.png.png in Resources */,
+				42715B251B9FF6F800052B4D /* pmd-face.png in Resources */,
 				42C6CB781AE7ADE800F0570B /* Shader.fsh in Resources */,
 				42715B271B9FF6F800052B4D /* simple-atlas.png in Resources */,
 				42715B291B9FF6F800052B4D /* texture_rgb_512x512.png in Resources */,
 				42715B281B9FF6F800052B4D /* texture_rgb_300x400.png in Resources */,
 				42FA27801B4910AE00F7D603 /* mask.png in Resources */,
-				42715B241B9FF6F800052B4D /* pmd-body.png.png in Resources */,
+				42715B241B9FF6F800052B4D /* pmd-body.png in Resources */,
 				42715B261B9FF6F800052B4D /* pmd-sample.pmd in Resources */,
 				42FA27821B4910F000F7D603 /* rgb.png in Resources */,
 			);
@@ -358,10 +354,11 @@
 				42293B041B6FCC8A00768E0C /* vert.m in Sources */,
 				42C6CB761AE7ADE800F0570B /* AppDelegate.m in Sources */,
 				42C6CB731AE7ADE800F0570B /* main.m in Sources */,
+				428CDD821BB04C7600C835C6 /* util_str.m in Sources */,
 				428CDD7E1BAE991000C835C6 /* texture.m in Sources */,
 				42C6CB9C1AE7B3BD00F0570B /* GLViewController.m in Sources */,
 				428CDD7B1BA3EFAC00C835C6 /* textures.m in Sources */,
-				42715B2F1BA04C7500052B4D /* pmdmanager.m in Sources */,
+				42715B2F1BA04C7500052B4D /* pmd.m in Sources */,
 				42293B081B6FCD1A00768E0C /* vec2.m in Sources */,
 				42FA278C1B53A0B700F7D603 /* mat4.m in Sources */,
 				422B1F881B973A7300DBB813 /* verts.m in Sources */,

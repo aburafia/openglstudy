@@ -10,26 +10,33 @@
 
 @implementation textures
 
--(void)add:(GLenum)textureUniteId filename:(NSString*)filename{
+-(id)init{
+    texturelist = [[NSMutableDictionary alloc] init];
+    return self;
+}
+
+-(void)add:(NSString*)filename{
     
-    int i = (int)(textureUniteId - GL_TEXTURE0);
-    
-    if(i < 0 || i > 7){
-        NSLog(@"テクスチャは８こまで");
-        return;
-    }
-    
-    texturelist[i] = [[texture alloc] init:textureUniteId filename:filename];
+    texture* t = [[texture alloc] init:filename];
+    [texturelist setValue:t forKey:filename];
+}
+
+-(texture*)get:(NSString*)filename{
+    return [texturelist valueForKey:filename];
+
+}
+-(void)bind:(NSString*)filename{
+    [[texturelist valueForKey:filename] bind];
 }
 
 -(void)free{
     
-    // 各々のテクスチャを解放する
-    int i = 0;
-    
-    for (i = 0; i < texture_count; ++i) {
-        [texturelist[i] free];
-        texturelist[i] = nil;
+    for (id key in [texturelist keyEnumerator]) {
+        
+        [[texturelist valueForKey:key] free];
+        [texturelist removeObjectForKey:key];
+        NSLog(@"Key:%@", key);
+
     }
 }
 

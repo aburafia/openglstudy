@@ -7,7 +7,7 @@
 //
 
 #import "GLViewController.h"
-#import "pmdmanager.h"
+#import "pmd.h"
 
 #define LOADER 1
 #define PI 3.141592
@@ -130,12 +130,16 @@
     
     //テクスチャを読み込む
     tex = [[textures alloc] init];
-    [tex add:GL_TEXTURE0 filename:@"texture_rgb_512x512.png"];
+    [tex add:@"texture_rgb_512x512.png"];
+    //[[tex get:@"texture_rgb_512x512.png"] bind];
+
     
     //pmdファイルを読み込み
-    pmdmanager* pmd = [[pmdmanager alloc] init];
-    [pmd load:@"pmd-sample.pmd"];
+    pmd* pmdfile = [[pmd alloc] init];
+    [pmdfile load:@"pmd-sample.pmd"];
+    [pmdfile loadTextures:tex];
     
+    [[tex get:@"pmd-face.png"] bind];
 }
 
 
