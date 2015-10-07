@@ -111,6 +111,8 @@ typedef struct PmdFile {
 } PmdFile;
 
 @interface pmd : NSObject{
+    
+    @public
     GLint _attr_pos;
     GLint _attr_uv;
     NSMutableArray* vert_array;

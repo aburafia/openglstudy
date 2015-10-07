@@ -29,6 +29,9 @@
 
     camera* cam;
     textures* tex;
+    
+    
+    pmd* pmdfile;
 }
 
 
@@ -130,16 +133,16 @@
     
     //テクスチャを読み込む
     tex = [[textures alloc] init];
-    [tex add:@"texture_rgb_512x512.png"];
+    //[tex add:@"texture_rgb_512x512.png"];
     //[[tex get:@"texture_rgb_512x512.png"] bind];
 
     
     //pmdファイルを読み込み
-    pmd* pmdfile = [[pmd alloc] init];
+    pmdfile = [[pmd alloc] init];
     [pmdfile load:@"pmd-sample.pmd"];
     [pmdfile loadTextures:tex];
     
-    [[tex get:@"pmd-face.png"] bind];
+    //[[tex get:@"pmd-face.png"] bind];
 }
 
 
@@ -169,10 +172,11 @@ float rrr = 0;
     GLfloat calc[4][4];
     [mat2 exportArrayGLType:calc];
     glUniformMatrix4fv(_unif_cammat4, 1, GL_FALSE, (GLfloat*)calc);
-
+    
+    /*
     //頂点リスト
     verts* vlist = [[verts alloc] init];
-    
+
     GLfloat left = -0.5;
     GLfloat right = 0.5;
     GLfloat front = -0.5;
@@ -208,16 +212,40 @@ float rrr = 0;
     
     [vlist vertExportToArray:posTri vertcount:count];
     
-    glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)posTri);
+    //glVertexAttribPointer(_attr_pos, 4, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)posTri);
+    */
     
-    glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(vertraw), (GLvoid*)((GLubyte*)posTri + sizeof(vec4raw)));
-
-    int vertcount = [vlist getTriangleCount] * 3;
-    GLshort idxTri[vertcount];
-    [vlist indexExportToArray:idxTri];
+    vec3raw* pospt = &pmdfile->_result.vertices->position;
+    glVertexAttribPointer(_attr_pos, 3, GL_FLOAT, GL_FALSE, sizeof(PmdVertex), (GLvoid*)pospt);
     
-    glDrawElements(GL_TRIANGLES, vertcount, GL_UNSIGNED_SHORT, idxTri);
+    vec2raw* uvpt = &pmdfile->_result.vertices->uv;
+    glVertexAttribPointer(_attr_uv, 2, GL_FLOAT, GL_FALSE, sizeof(PmdVertex), (GLvoid*)uvpt);
 
+    GLint beginIndicesIndex = 0;
+    
+    //マテリアルの数だけ描写を行う。
+    for(int i = 0;i < pmdfile->_result.materials_num; i++){
+        
+        PmdMaterial* mat = &pmdfile->_result.materials[i];
+        NSString *texture_name = [[NSString alloc] initWithUTF8String:mat->diffuse_texture_name ];
+        texture* t = [tex get:texture_name];
+        
+        if(t == nil){
+            glUniform4f(_unif_color, mat->diffuse.x, mat->diffuse.y, mat->diffuse.z, mat->diffuse.w);
+        }else{
+            [t bind];
+            glUniform1i(_unif_texture, 0);
+            glUniform4f(_unif_color, 0, 0, 0, 0);
+        }
+        
+        
+        //インデックスバッファでレンダリング
+        glDrawElements(GL_TRIANGLES, mat->indices_num, GL_UNSIGNED_SHORT, pmdfile->_result.indices + beginIndicesIndex);
+        assert(glGetError() == GL_NO_ERROR);
+        beginIndicesIndex += mat->indices_num;
+        
+    }
+    
     //描画
     //glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
 
