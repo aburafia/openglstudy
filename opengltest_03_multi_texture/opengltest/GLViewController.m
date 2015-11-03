@@ -137,7 +137,7 @@
     glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    glUniform1i(_unif_texture, 2);
+    glUniform1i(_unif_texture, 1);
 
     const GLfloat position[] = {
         -0.75f, 0.75f,

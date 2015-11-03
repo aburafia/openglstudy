@@ -109,7 +109,7 @@
     
     //カメラの設定
     //カメラのプロパティ。位置、どこをみてるか、カメラの上の方向
-    vec3* campos = [[vec3 alloc] init:3.0f y:3.0f z:-5.0f];
+    vec3* campos = [[vec3 alloc] init:3.0f y:3.0f z:-15.0f];
     vec3* lookpos = [[vec3 alloc] init:0.0f y:0.0f z:0.0f];
     vec3* up = [[vec3 alloc] init:0 y:1.0 z:0];
     
@@ -165,8 +165,8 @@ float rrr = 0;
     mat4* mat1 = [parspective multiplyMat4:view2];
 
     //(射影 x view) x ワールド加工系
-    mat4* rotate = [mat4 rotate:[[vec3 alloc] init:1 y:1 z:0] radian:rrr];
-    rrr += 0.01;
+    mat4* rotate = [mat4 rotate:[[vec3 alloc] init:0 y:1 z:0] radian:rrr];
+    rrr += 0.1;
     mat4* mat2 = [mat1 multiplyMat4:rotate];
 
     GLfloat calc[4][4];
@@ -237,7 +237,6 @@ float rrr = 0;
             glUniform1i(_unif_texture, 0);
             glUniform4f(_unif_color, 0, 0, 0, 0);
         }
-        
         
         //インデックスバッファでレンダリング
         glDrawElements(GL_TRIANGLES, mat->indices_num, GL_UNSIGNED_SHORT, pmdfile->_result.indices + beginIndicesIndex);

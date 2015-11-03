@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F569A0BE-83E1-407E-9A84-0523C9468869</string>
+	<key>IDESourceControlProjectName</key>
+	<string>opengltest</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D0B6A2F3F1E6B8AB9368B87150BA8F50D7C8B798</key>
+		<string>https://github.com/aburafia/openglstudy.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>opengltest_09_toon/opengltest.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D0B6A2F3F1E6B8AB9368B87150BA8F50D7C8B798</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/aburafia/openglstudy.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D0B6A2F3F1E6B8AB9368B87150BA8F50D7C8B798</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D0B6A2F3F1E6B8AB9368B87150BA8F50D7C8B798</string>
+			<key>IDESourceControlWCCName</key>
+			<string>openglstudy</string>
+		</dict>
+	</array>
+</dict>
+</plist>
