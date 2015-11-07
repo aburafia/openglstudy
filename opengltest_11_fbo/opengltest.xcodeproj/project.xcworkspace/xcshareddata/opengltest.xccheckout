@@ -14,7 +14,7 @@
 		<string>https://github.com/aburafia/openglstudy.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>opengltest_02_texture/opengltest.xcodeproj</string>
+	<string>opengltest_11_offscreen/opengltest.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D0B6A2F3F1E6B8AB9368B87150BA8F50D7C8B798</key>
